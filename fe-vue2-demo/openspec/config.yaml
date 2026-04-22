@@ -1,0 +1,109 @@
+schema: spec-driven
+
+# 项目基本信息
+name: fe-vue2-demo
+description: |
+  前端 Vue2 移动端示例项目，使用 OpenSpec 工作流开发需求。
+  当前已实现兑换记录列表页面，支持 Mock 数据切换。
+
+context: |
+  ## 技术栈
+  - Vue 2.6.14 - 渐进式 JavaScript 框架
+  - Vue Router 3.6.5 - 官方路由管理器
+  - Vant 2.13.6 - 移动端 Vue 组件库
+  - JavaScript (ES6+) - 开发语言
+  - Vue CLI 5.0 - 构建工具
+  - ESLint - 代码规范检查
+
+  ## 项目结构
+  ```
+  src/
+  ├── api/                    # API 接口封装
+  │   └── exchange.js         # 兑换模块接口（查询、提交兑换记录）
+  │
+  ├── assets/                 # 静态资源
+  │   └── logo.png            # 项目 Logo
+  │
+  ├── components/             # 公共组件
+  │   └── HelloWorld.vue      # 示例组件
+  │
+  ├── mock/                   # Mock 数据
+  │   ├── exchangeData.js     # 兑换记录 mock 数据、状态枚举、分页/筛选工具
+  │   └── index.js            # mock 模块统一导出
+  │
+  ├── router/                 # 路由配置
+  │   └── index.js            # 路由定义（当前：/exchange-record）
+  │
+  ├── utils/                  # 工具函数
+  │   └── request.js          # HTTP 请求封装（fetch + Toast 错误提示）
+  │
+  ├── views/                  # 页面视图组件
+  │   └── ExchangeRecord.vue  # 兑换记录列表页面
+  │
+  ├── App.vue                 # 根组件
+  └── main.js                 # 入口文件（引入 Vant 组件、挂载 Vue）
+  ```
+
+  ### 目录职责详解
+
+  **api/** - 按业务模块组织接口文件，支持 `USE_MOCK` 环境变量切换真实/Mock 数据
+
+  **components/** - 存放可复用的公共组件，建议按功能分类（form/、list/、dialog/）
+
+  **mock/** - 开发阶段模拟后端数据，导出枚举、mock 数据、辅助函数（分页、筛选）
+
+  **router/** - Vue Router 配置，支持路由懒加载
+
+  **utils/** - request.js 统一封装 fetch，可扩展 storage.js、validate.js 等
+
+  **views/** - 页面级组件，与路由一一对应，样式使用 scoped + :deep() 覆盖 Vant 样式
+
+  ## 编码规范
+  - 使用单引号字符串
+  - 组件名使用 PascalCase（如 ExchangeRecord）
+  - 文件命名使用驼峰式（如 exchange.js）
+  - Vue 组件使用 Options API 风格
+  - API 函数使用 JSDoc 注释
+  - scoped CSS 使用 :deep() 穿透样式
+  - 统一使用 async/await 或 Promise 链式调用
+
+  ## 开发约定
+  - 组件名使用多词组合，避免与 HTML 元素冲突
+  - API 接口统一放在 api/ 目录，按功能模块组织
+  - 工具函数统一放在 utils/ 目录
+  - Mock 数据通过环境变量 VUE_APP_USE_MOCK 控制
+  - 样式使用 scoped，组件级样式隔离
+  - 移动端适配使用 Vant 组件库
+
+  ## 数据规范
+  - 后端返回格式：{ code: 0, data: {}, message: '' }
+  - code 为 0 或 200 表示成功
+  - API 请求封装在 utils/request.js
+
+  ## 开发命令
+  - npm run serve - 启动开发服务（默认开启 mock）
+  - npm run build - 生产构建
+  - npm run lint - 代码检查与修复
+
+  ## 环境变量
+  - .env.development - 开发环境（VUE_APP_USE_MOCK=true）
+  - .env.production - 生产环境（VUE_APP_USE_MOCK=false）
+  - VUE_APP_API_BASE_URL - API 基础地址
+
+rules:
+  proposal:
+    - 提案使用中文撰写，保持简洁清晰
+    - 包含目标、非目标、技术方案概述
+    - 评估对现有功能的影响范围
+  design:
+    - 组件设计遵循 Vue 2 Options API 风格
+    - 明确 props、data、methods、生命周期
+    - 考虑移动端适配和 Vant 组件使用
+  tasks:
+    - 任务按功能模块拆分，单个任务控制在 2 小时内
+    - 每个任务包含明确的验收标准
+    - 优先处理核心功能，UI 优化可后置
+  spec:
+    - API 接口文档包含请求/响应格式
+    - 组件文档包含 props 和事件说明
+    - 标注需要 mock 的数据结构

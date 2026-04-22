@@ -72,6 +72,16 @@ fe-vue2-demo/
 │   ├── utils/                   # 工具函数
 │   ├── mock/                    # Mock 数据（开发环境模拟）
 │   └── assets/                  # 静态资源
+├── openspec/                    # OpenSpec 需求管理目录
+│   ├── changes/                 # 变更目录
+│   │   └── archive/             # 已归档变更
+│   ├── specs/                   # 主规范库
+│   ├── config.yaml              # OpenSpec 配置
+│   └── README.md                # OpenSpec 使用指南
+├── .claude/                     # Claude Code 配置
+│   ├── commands/                # 自定义命令
+│   ├── skills/                  # 自定义技能
+│   └── hooks/                   # 自动化钩子
 ├── docs/                        # 项目文档
 │   └── ai-context/              # AI 上下文文档
 ├── .env.development             # 开发环境变量
@@ -93,10 +103,34 @@ fe-vue2-demo/
 | `src/utils/` | 工具函数，如 HTTP 请求封装（request.js） |
 | `src/mock/` | Mock 数据，用于开发环境模拟接口 |
 | `src/router/` | Vue Router 实例及路由规则 |
+| `openspec/` | OpenSpec 需求管理，包含变更、规范、配置 |
+| `.claude/` | Claude Code AI 助手配置，包含命令、技能、钩子 |
 
 ## 核心业务模块
 
 - **兑换记录** - 查看和管理兑换记录列表
+
+## OpenSpec 工作流
+
+本项目使用 OpenSpec 进行需求管理和代码生成。详细使用指南请参考 `openspec/README.md`。
+
+### 常用命令
+
+| 命令 | 说明 |
+|------|------|
+| `/opsx:explore` | 探索模式，讨论需求细节 |
+| `/opsx:propose` | 提案模式，生成完整变更规划 |
+| `/opsx:apply` | 应用变更，执行代码生成 |
+| `/opsx:verify` | 验证变更，检查实现质量 |
+| `/opsx:archive` | 归档变更，整理工作区 |
+
+### 典型开发流程
+
+1. **需求探索** - 使用 `/opsx:explore` 与 AI 讨论需求细节
+2. **创建变更** - 使用 `/opsx:propose` 或 `/opsx:new` 创建变更规划
+3. **执行开发** - 使用 `/opsx:apply` 根据任务清单生成代码
+4. **验证质量** - 使用 `/opsx:verify` 检查实现是否符合规范
+5. **归档完成** - 使用 `/opsx:archive` 归档已完成的变更
 
 ## 开发指南
 

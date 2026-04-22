@@ -1,6 +1,6 @@
 <template>
   <div class="exchange-record">
-    <van-nav-bar title="兑换记录" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar title="兑换记录页" left-arrow @click-left="onClickLeft" />
     <div class="record-list">
       <div v-if="loading" class="loading-wrapper">
         <van-loading size="24px" vertical>加载中...</van-loading>

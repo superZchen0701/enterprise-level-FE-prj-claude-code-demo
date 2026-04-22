@@ -1,5 +1,6 @@
 {
   "name": "fe-vue2-demo",
+  "description": "前端Vue2示例项目",
   "version": "0.1.0",
   "private": true,
   "scripts": {

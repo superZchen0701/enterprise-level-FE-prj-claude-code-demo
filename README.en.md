@@ -20,7 +20,7 @@ This repository is a Claude Code demo for enterprise-level front-end projects, d
 
 ### fe-vue2-demo
 
-A mobile application based on Vue 2 + Vant, featuring business modules such as exchange record tracking.
+A mobile application based on Vue 2 + Vant.
 
 **Technology Stack:**
 
