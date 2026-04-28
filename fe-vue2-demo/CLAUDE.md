@@ -65,10 +65,10 @@ bash .claude/hooks/install-git-hooks.sh
 
 | 文件 | 用途 |
 |------|------|
-| `.github/workflows/ci-cd.yml` | CI/CD 主配置文件 |
-| `.github/workflows/DEPLOYMENT_GUIDE.md` | 部署 配置指南 |
-| `.github/workflows/SECRETS_GUIDE.md` | Secrets 配置指南 |
-| `deploy.sh` | 部署脚本模板 |
+| 仓库根目录下的 `.github/workflows/ci-cd.yml` | CI/CD 主配置文件 |
+| 仓库根目录下的 `.github/workflows/DEPLOYMENT_GUIDE.md` | 部署 配置指南 |
+| 仓库根目录下的 `.github/workflows/SECRETS_GUIDE.md` | Secrets 配置指南 |
+| 仓库根目录下的 `deploy.sh` | 部署脚本模板 |
 
 ---
 

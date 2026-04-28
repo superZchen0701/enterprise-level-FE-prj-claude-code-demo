@@ -184,5 +184,5 @@ on:
 ## 相关文档
 
 - [GitHub Environments 文档](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment)
-- [项目部署脚本](./deploy.sh)
+- [项目部署脚本](../../deploy.sh)
 - [SECRETS_GUIDE.md](./SECRETS_GUIDE.md) - Secrets 配置指南
