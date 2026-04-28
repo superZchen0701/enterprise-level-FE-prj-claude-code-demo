@@ -85,6 +85,7 @@ jobs:
   security:
     name: 安全扫描
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     permissions:
       contents: read
       security-events: write
