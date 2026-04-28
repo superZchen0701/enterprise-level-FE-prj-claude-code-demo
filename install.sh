@@ -230,6 +230,7 @@ show_usage() {
 
 # ==================== 主函数 ====================
 main() {
+    # 显示横幅
     show_banner
 
     # 检测操作系统
@@ -241,10 +242,10 @@ main() {
     # 安装 Git Hooks
     install_git_hooks
 
-    # # 配置 MCP（可选）
+    # 配置 MCP（可选）
     configure_mcp
 
-    # # 显示使用说明
+    # 显示使用说明
     show_usage
 
     log_success "安装完成！"
