@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 /**
  * HTTP 请求封装
  * 基于 fetch API 封装，提供统一的请求接口
@@ -18,7 +16,7 @@ const BASE_URL = process.env.VUE_APP_API_BASE_URL || ''
  * @returns {Promise} 返回响应数据
  */
 export function request(url, options = {}) {
-  const { method = 'GET', data, params } = options
+  const { method = 'GET', data, params, timeout = 15000 } = options
 
   // 拼接完整 URL
   let fullUrl = BASE_URL + url
@@ -34,12 +32,15 @@ export function request(url, options = {}) {
     }
   }
 
-  // 构建请求配置
+  // 构建请求配置，包含超时控制
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeout)
   const config = {
     method,
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    signal: controller.signal
   }
 
   // POST/PUT 请求添加请求体
@@ -50,6 +51,7 @@ export function request(url, options = {}) {
   // 发起请求
   return fetch(fullUrl, config)
     .then(response => {
+      clearTimeout(timeoutId)
       if (!response.ok) {
         throw new Error(`请求失败: ${response.status} ${response.statusText}`)
       }
@@ -63,9 +65,9 @@ export function request(url, options = {}) {
       return res.data
     })
     .catch(err => {
-      // 请求错误，通过 toast 提示用户
-      if (Vue.prototype.$toast) {
-        Vue.prototype.$toast(err.message || '网络异常')
+      clearTimeout(timeoutId)
+      if (err.name === 'AbortError') {
+        err.message = '请求超时，请重试'
       }
       return Promise.reject(err)
     })

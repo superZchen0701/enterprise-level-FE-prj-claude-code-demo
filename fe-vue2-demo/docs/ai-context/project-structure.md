@@ -22,6 +22,19 @@
 │   ├── utils/                   # 工具函数
 │   ├── mock/                    # Mock 数据（开发环境模拟）
 │   └── assets/                  # 静态资源（图片、字体等）
+├── openspec/                    # OpenSpec 需求管理
+│   ├── changes/                 # 变更目录
+│   │   └── archive/             # 已归档变更
+│   ├── specs/                   # 主规范库
+│   ├── config.yaml              # OpenSpec 配置
+│   └── README.md                # OpenSpec 使用指南
+├── .claude/                     # Claude Code 配置
+│   ├── commands/                # 自定义命令
+│   ├── skills/                  # 自定义技能
+│   ├── hooks/                   # 自动化钩子
+│   └── settings.json            # 权限与 hook 配置
+├── .github/                     # GitHub 配置
+│   └── workflows/               # CI/CD 流水线
 ├── docs/                        # 项目文档
 │   └── ai-context/              # AI 上下文文档
 ├── .env.development             # 开发环境变量

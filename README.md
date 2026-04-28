@@ -16,6 +16,45 @@
 | `README.md` | 中文说明文档 |
 | `README.en.md` | English Documentation |
 
+## 开发指南
+
+### 环境要求
+
+- Node.js >= 20.19.0
+- npm >= 10.1.0
+
+### 推荐工具
+
+- Claude Code
+
+## Claude Code新成员入职清单
+
+### 第1步：环境准备
+
+- [ ] 安装Git、Node.js、npm、OpenSpec。
+- [ ] 安装Claude Code（参考[Claude Code 官方文档-快速开始-步骤1：安装ClaudeCode](https://code.claude.com/docs/zh-CN/quickstart)）。
+- [ ] 使用CC Switch管理多套API模型配置（参考[cc-switch](https://github.com/farion1231/cc-switch)）。
+
+### 第2步：项目配置
+
+- [ ] 克隆项目仓库。
+- [ ] 运行 `claude` 命令，打开claude code界面。
+- [ ] 运行`!bash install.sh`命令，执行一键安装脚本。
+
+### 第3步：熟悉子项目规范
+
+- [ ] cd 进入相应子项目目录（如`fe-vue2-demo`）。
+- [ ] 阅读相应子项目下的`CLAUDE.md`文件。
+- [ ] 运行 `/help` 查看可用命令或技能。
+- [ ] 尝试执行一次项目源码分析（输入“分析项目源码结构”）。
+
+### 第4步：开发新功能
+
+- [ ] 本地运行`npm install`安装依赖，确保项目依赖正常；运行`npm run serve`启动开发服务。
+- [ ] 尝试使用OpenSpec指令进行新功能开发（输入“/opsx:propose 我需要开发新功能：搜索功能，可以在兑换记录页面搜索兑换码。要求如下：1.使用 Vant 的 Search 组件。2.支持实时搜索。”）。
+- [ ] 本地运行相关npm命令（如`npm run lint`、`npm run serve`、`npm run build`等），检查新功能是否正常运行。
+- [ ] 提交一个测试PR验证CI流程。
+
 ## 子项目
 
 ### fe-vue2-demo
@@ -42,52 +81,22 @@ npm install
 # 开发服务
 npm run serve
 
+# 代码检查
+npm run lint
+
 # 生产构建
 npm run build
 ```
 
-详细文档请查看：[fe-vue2-demo/README.md](fe-vue2-demo/README.md)
+**项目文档：**
 
-## Claude Code 配置
+详见：[fe-vue2-demo/README.md](fe-vue2-demo/README.md)
 
-### 语言规则
+**Claude Code 配置：**
 
-本仓库所有对话、解释、文档、代码注释**必须全部使用简体中文**。
+详见：[fe-vue2-demo/CLAUDE.md](fe-vue2-demo/CLAUDE.md)
 
-### 核心规范
-
-- **Vue 组件**：使用 Options API，禁止 Composition API
-- **命名规范**：
-  - 文件名：kebab-case（如 `user-service.js`）
-  - 组件名：PascalCase（如 `UserCard.vue`）
-  - 函数/变量：camelCase（如 `getUserById`）
-- **Git 提交**：`<type>(<TAPD ID>): <description>`
-
-详细规范请查看：[fe-vue2-demo/CLAUDE.md](fe-vue2-demo/CLAUDE.md)
-
-## 项目文档
-
-每个子项目都包含完整的文档体系：
-
-| 文档 | 说明 |
-|------|------|
-| README.md | 项目说明与快速开始 |
-| CLAUDE.md | Claude Code 开发行为规范 |
-| docs/ai-context/ | AI 上下文文档（项目结构、编码规范、架构设计） |
-
-## 开发指南
-
-### 环境要求
-
-- Node.js >= 14.x
-- npm >= 6.x
-
-### 推荐工具
-
-- VS Code + Volar 扩展
-- 终端：Git Bash（Windows）或默认终端（macOS/Linux）
-
-## 相关资源
+**相关资源：**
 
 - [Vue 2 官方文档](https://v2.vuejs.org/)
 - [Vant 2 组件库](https://vant-contrib.gitee.io/vant/v2/)

@@ -1,0 +1,216 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'bugfix/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# 取消同一分支的旧运行
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20.19.0'
+  PROJECT_PATH: 'fe-vue2-demo'
+
+jobs:
+  # ===========================================
+  # 1. 代码检查（执行.claude/hooks/pre-commit.sh脚本）
+  # ===========================================
+  lint:
+    name: 代码检查
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置 Node.js 环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ${{ env.PROJECT_PATH }}/package-lock.json
+
+      - name: 安装依赖
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: npm ci
+
+      - name: 运行 pre-commit 检查
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: bash .claude/hooks/pre-commit.sh
+
+  # ===========================================
+  # 2. PR 代码审查（仅在 PR 时触发，调用 /code-review 命令）
+  # ===========================================
+  code-review:
+    name: 代码审查
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 运行 Claude Code 代码审查 (/code-review)
+        uses: anthropics/claude-code-action@beta
+        with:
+          claude_code_kwargs: |
+            /code-review
+        env:
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+          ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+          ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
+
+  # ===========================================
+  # 3. 安全扫描（调用 /security-review 命令）
+  # ===========================================
+  security:
+    name: 安全扫描
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 运行 Claude Code 安全审查 (/security-review)
+        uses: anthropics/claude-code-action@beta
+        with:
+          claude_code_kwargs: |
+            /security-review
+        env:
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
+          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
+          ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
+          ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
+
+  # ===========================================
+  # 4. 构建
+  # ===========================================
+  build:
+    name: 构建
+    runs-on: ubuntu-latest
+    needs: [lint, security]
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js 环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ${{ env.PROJECT_PATH }}/package-lock.json
+
+      - name: 安装依赖
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: npm ci
+
+      - name: 运行构建
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: npm run build
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: ${{ env.PROJECT_PATH }}/dist
+          retention-days: 7
+
+  # ===========================================
+  # 5. TODO 待验证 - 部署到 Staging（仅 develop 分支）
+  # ===========================================
+  deploy-staging:
+    name: 部署到 Staging
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ${{ env.PROJECT_PATH }}/dist
+
+      - name: 部署到 Staging 环境
+        run: |
+          echo "🚀 正在部署到 Staging 环境..."
+          echo "分支：${{ github.ref_name }}"
+          echo "提交：${{ github.sha }}"
+          echo "时间：$(date -u)"
+
+          # TODO: 在此处添加实际的部署命令
+          # 示例：使用 rsync 部署到远程服务器
+          # rsync -avz --delete ./fe-vue2-demo/dist/ user@staging-server:/var/www/staging/
+
+          # 示例：使用 SSH 部署
+          # ssh user@staging-server "cd /var/www/staging && ./deploy.sh"
+
+          # 示例：部署到静态托管（如 Netlify、Vercel、阿里云 OSS 等）
+          # netlify deploy --prod --dir=fe-vue2-demo/dist
+
+          echo "✅ Staging 部署完成（占位符，请配置实际部署命令）"
+
+  # ===========================================
+  # 6. TODO 待验证 - 部署到 Production（仅 main 分支）
+  # ===========================================
+  deploy-production:
+    name: 部署到 Production
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://www.example.com
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 下载构建产物
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ${{ env.PROJECT_PATH }}/dist
+
+      - name: 部署到 Production 环境
+        run: |
+          echo "🚀 正在部署到 Production 环境..."
+          echo "分支：${{ github.ref_name }}"
+          echo "提交：${{ github.sha }}"
+          echo "时间：$(date -u)"
+
+          # TODO: 在此处添加实际的部署命令
+          # 示例：使用 rsync 部署到远程服务器
+          # rsync -avz --delete ./fe-vue2-demo/dist/ user@prod-server:/var/www/production/
+
+          # 示例：使用 SSH 部署
+          # ssh user@prod-server "cd /var/www/production && ./deploy.sh"
+
+          # 示例：部署到静态托管（如 Netlify、Vercel、阿里云 OSS 等）
+          # netlify deploy --prod --dir=fe-vue2-demo/dist
+
+          echo "✅ Production 部署完成（占位符，请配置实际部署命令）"

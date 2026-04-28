@@ -168,19 +168,9 @@ import ExchangeRecord from '@/views/ExchangeRecord.vue'
 import { getList } from '@/api/exchange'
 ```
 
-## 开发规范
+## 规范
 
-详见 [CLAUDE.md](CLAUDE.md)，核心规范：
-
-- **语言**：所有对话、解释、文档、代码注释**必须全部使用简体中文**
-- **Vue 组件**：使用 Options API，禁止 Composition API
-- **命名**：
-  - 文件名：kebab-case（如 `user-service.js`）
-  - 组件名：PascalCase（如 `UserCard.vue`）
-  - 函数/变量：camelCase（如 `getUserById`）
-  - 常量：UPPER_SNAKE_CASE（如 `MAX_RETRY_COUNT`）
-- **Git 分支**：`feature_xxx` / `fix_xxx` / `refactor_xxx`
-- **提交格式**：`<type>(<TAPD ID>): <description>`
+详见 [CLAUDE.md](CLAUDE.md)
 
 ## 常见问题
 

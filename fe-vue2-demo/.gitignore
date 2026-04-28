@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 /dist
-/.claude/settings.local.json
 
 # local env files
 .env.local
@@ -21,3 +20,16 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# .gitignore 中不要忽略这些
+!.claude/
+!.claude/settings.json
+!.claude/commands/
+!.claude/hooks/
+!.claude/skills/
+!CLAUDE.md
+!.mcp.json
+
+# .gitignore 中要忽略这些
+.claude/settings.local.json
+.claude/*.local.*

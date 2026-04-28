@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import ExchangeRecord from '../views/ExchangeRecord.vue'
+
+const ExchangeRecord = () => import('../views/ExchangeRecord.vue')
 
 Vue.use(VueRouter)
 

@@ -14,12 +14,20 @@
       "Bash(git diff*)",
       "Bash(git log*)",
       "Bash(git add*)",
-      "Bash(git commit*)"
+      "Bash(git commit*)",
+      "Bash(git ls-files*)",
+      "Bash(grep*)"
     ],
     "deny": [
-      "Write(.env*)",
+      "Read(./.env*)",
+      "Write(./.env*)",
+      "Read(**/secrets/**)",
       "Write(**/secrets/**)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
       "Bash(rm -rf *)",
+      "Bash(git push --force)",
+      "Bash(git reset --hard)",
       "Bash(sudo *)",
       "Bash(curl * | bash)"
     ]
@@ -43,19 +51,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/pre-commit-check.sh",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/auto-lint.sh",
+            "command": ".claude/hooks/pre-commit.sh",
             "timeout": 60
           }
         ]

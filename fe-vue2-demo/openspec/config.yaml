@@ -24,9 +24,6 @@ context: |
   ├── assets/                 # 静态资源
   │   └── logo.png            # 项目 Logo
   │
-  ├── components/             # 公共组件
-  │   └── HelloWorld.vue      # 示例组件
-  │
   ├── mock/                   # Mock 数据
   │   ├── exchangeData.js     # 兑换记录 mock 数据、状态枚举、分页/筛选工具
   │   └── index.js            # mock 模块统一导出
@@ -35,7 +32,7 @@ context: |
   │   └── index.js            # 路由定义（当前：/exchange-record）
   │
   ├── utils/                  # 工具函数
-  │   └── request.js          # HTTP 请求封装（fetch + Toast 错误提示）
+  │   └── request.js          # HTTP 请求封装（fetch + 超时控制 + 统一错误处理）
   │
   ├── views/                  # 页面视图组件
   │   └── ExchangeRecord.vue  # 兑换记录列表页面
@@ -48,7 +45,7 @@ context: |
 
   **api/** - 按业务模块组织接口文件，支持 `USE_MOCK` 环境变量切换真实/Mock 数据
 
-  **components/** - 存放可复用的公共组件，建议按功能分类（form/、list/、dialog/）
+  **components/** - 存放可复用的公共组件，按功能分类（form/、list/、dialog/），当前项目暂无公共组件
 
   **mock/** - 开发阶段模拟后端数据，导出枚举、mock 数据、辅助函数（分页、筛选）
 

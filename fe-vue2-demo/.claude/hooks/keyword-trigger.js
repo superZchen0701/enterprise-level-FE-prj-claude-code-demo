@@ -10,30 +10,38 @@
 
 // 从 stdin 或环境变量读取用户输入
 let userInput = '';
+let hasInput = false;
 
-// 优先检查环境变量是否存在（更可靠的方式）
-// hook 系统可能通过环境变量传递用户输入
+// 优先检查环境变量（hook 系统可能通过环境变量传递）
 const envPrompt = process.env.USER_PROMPT || process.env.CLAUDE_PROMPT || '';
 
 if (envPrompt) {
   // 如果环境变量有内容，直接使用
   userInput = envPrompt;
+  hasInput = true;
   checkKeywords(userInput);
-} else if (process.stdin.isTTY) {
-  // 如果是 TTY 模式且没有环境变量，无输入可处理
-  process.exit(0);
-} else {
-  // 从 stdin 读取（异步）
+} else if (!process.stdin.isTTY) {
+  // 从 stdin 读取（同步方式）
   process.stdin.setEncoding('utf8');
-  process.stdin.on('readable', () => {
-    let chunk;
-    while ((chunk = process.stdin.read()) !== null) {
-      userInput += chunk;
+
+  // 使用 readFileSync 方式同步读取
+  const fs = require('fs');
+  try {
+    userInput = fs.readFileSync(0, 'utf8');
+    if (userInput.trim()) {
+      hasInput = true;
+      checkKeywords(userInput);
     }
-  });
-  process.stdin.on('end', () => {
-    checkKeywords(userInput);
-  });
+  } catch (e) {
+    // 读取失败则退出
+  }
+
+  if (!hasInput) {
+    process.exit(0);
+  }
+} else {
+  // TTY 模式，无输入
+  process.exit(0);
 }
 
 /**
@@ -48,7 +56,7 @@ function checkKeywords(input) {
   // skill: 对应的技能名称（用于斜杠命令）
   const rules = [
     {
-      patterns: ['代码审查', '审查代码', '规范检查', 'lint检查', '代码规范', '检查规范', '代码检查'],
+      patterns: ['代码审查', '审查代码', '规范检查', 'lint 检查', 'lint检查', '代码规范', '检查规范', '代码检查'],
       allOf: ['检查', '规范'],
       skill: 'code-review',
       description: '代码审查'
@@ -71,6 +79,20 @@ function checkKeywords(input) {
       allOfAlt: [['分析', '结构'], ['分析', '模块']],
       skill: 'project-structure',
       description: '项目结构'
+    },
+    {
+      patterns: ['帮我总结变更记录并提交代码', '总结变更并提交', '提交代码', '提交更改', '提交变更', '总结并代码提交'],
+      allOf: ['提交', '代码'],
+      allOfAlt: [['总结', '变更', '提交'], ['提交', '代码'], ['总结', '提交']],
+      skill: 'code-commit',
+      description: '总结变更并提交代码'
+    },
+    {
+      patterns: ['安全审查', '安全检查', '安全扫描', '漏洞扫描', '敏感信息检查', '/security-review'],
+      allOf: ['安全', '检查'],
+      allOfAlt: [['安全', '审查'], ['安全', '扫描'], ['安全', '检查']],
+      skill: 'security-review',
+      description: '安全审查'
     }
   ];
 

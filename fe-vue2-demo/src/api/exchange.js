@@ -1,5 +1,5 @@
 import { get, post } from '@/utils/request'
-import { mockRecords } from '@/mock'
+import { mockRecords, getMockRecordsWithPagination } from '@/mock'
 
 // 是否使用 mock 数据（通过环境变量控制）
 const USE_MOCK = process.env.VUE_APP_USE_MOCK === 'true'
@@ -12,6 +12,9 @@ const USE_MOCK = process.env.VUE_APP_USE_MOCK === 'true'
 export function getExchangeRecords(params = {}) {
   // 如果开启 mock，直接返回 mock 数据
   if (USE_MOCK) {
+    if (params && (params.page || params.status)) {
+      return Promise.resolve(getMockRecordsWithPagination(params.page, params.pageSize))
+    }
     return Promise.resolve(mockRecords)
   }
 

@@ -5,7 +5,7 @@
       <div v-if="loading" class="loading-wrapper">
         <van-loading size="24px" vertical>加载中...</van-loading>
       </div>
-      <van-cell v-else v-for="item in records" :key="item.code">
+      <van-cell v-else-if="records.length > 0" v-for="item in records" :key="item.code">
         <template #title>
           <div class="record-item">
             <div class="record-date">{{ item.date }}</div>
@@ -22,6 +22,9 @@
           </div>
         </template>
       </van-cell>
+      <div v-else-if="!loading" class="empty-wrapper">
+        <div class="empty-text">暂无兑换记录</div>
+      </div>
     </div>
   </div>
 </template>
@@ -130,6 +133,19 @@ export default {
 }
 
 .record-status {
+  font-size: 14px;
+  color: #999;
+}
+
+.empty-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+}
+
+.empty-text {
   font-size: 14px;
   color: #999;
 }
