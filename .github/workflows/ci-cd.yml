@@ -60,13 +60,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: 运行 Claude Code 代码审查 (/code-review)
+      id-token: write
         uses: anthropics/claude-code-action@beta
         with:
           claude_code_kwargs: |
@@ -86,6 +80,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      id-token: write
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
