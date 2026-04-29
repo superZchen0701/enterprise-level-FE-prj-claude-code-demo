@@ -70,6 +70,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 链接 Claude Code 配置到仓库根目录
+        run: |
+          ln -sf ${{ env.PROJECT_PATH }}/.claude .claude
+          ln -sf ${{ env.PROJECT_PATH }}/CLAUDE.md CLAUDE.md
+
       - name: 运行 Claude Code 代码审查 (/code-review)
         uses: anthropics/claude-code-action@v1
         with:
