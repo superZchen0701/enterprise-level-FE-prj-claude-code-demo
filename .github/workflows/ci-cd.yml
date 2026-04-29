@@ -70,19 +70,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 链接 Claude Code 配置到仓库根目录
-        run: |
-          ln -sf ${{ env.PROJECT_PATH }}/.claude .claude
-          ln -sf ${{ env.PROJECT_PATH }}/CLAUDE.md CLAUDE.md
-
       - name: 运行 Claude Code 代码审查 (/code-review)
-        uses: anthropics/claude-code-action@v1
-        with:
-          prompt: /code-review
-          anthropic_api_key: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          show_full_output: true
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude /code-review
         env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
           ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
           ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
