@@ -45,7 +45,9 @@ jobs:
 
       - name: 安装依赖
         working-directory: ${{ env.PROJECT_PATH }}
-        run: npm ci
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: 运行 pre-commit 检查
         working-directory: ${{ env.PROJECT_PATH }}
@@ -69,19 +71,19 @@ jobs:
           fetch-depth: 0
 
       - name: 运行 Claude Code 代码审查 (/code-review)
-        uses: anthropics/claude-code-action@beta
+        uses: anthropics/claude-code-action@v1
         with:
-          direct_prompt: |
+          prompt: |
             /code-review
+          anthropic_api_key: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
-          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
           ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
           ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
 
   # ===========================================
-  # 3. 安全扫描（PR 额外调用 Claude Code AI 审查；push + PR 均执行硬性检查）
+  # 3. 安全扫描（执行${{ env.PROJECT_PATH }}/.claude/hooks/security-review.sh脚本）
   # ===========================================
   security:
     name: 安全扫描
@@ -123,7 +125,9 @@ jobs:
 
       - name: 安装依赖
         working-directory: ${{ env.PROJECT_PATH }}
-        run: npm ci
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: 运行构建
         working-directory: ${{ env.PROJECT_PATH }}
@@ -159,7 +163,9 @@ jobs:
 
       - name: 安装依赖
         working-directory: ${{ env.PROJECT_PATH }}
-        run: npm ci
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: 运行构建
         working-directory: ${{ env.PROJECT_PATH }}
@@ -207,7 +213,9 @@ jobs:
 
       - name: 安装依赖
         working-directory: ${{ env.PROJECT_PATH }}
-        run: npm ci
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: 运行构建
         working-directory: ${{ env.PROJECT_PATH }}
