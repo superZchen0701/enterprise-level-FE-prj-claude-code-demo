@@ -79,14 +79,7 @@ ANTHROPIC_BASE_URL      Updated recently  （仅第三方网关需要）
 
 ### 3.1 流水线阶段
 
-| 阶段 | 名称 | 调用命令 | 触发条件 |
-|------|------|----------|----------|
-| 1 | `lint` | `bash .claude/hooks/pre-commit.sh` | 所有 PR 和推送 |
-| 2 | `code-review` | `/code-review` | 仅 PR |
-| 3 | `security` | `/security-review` | 所有 PR 和推送 |
-| 4 | `build` | `npm run build` | 所有 PR 和推送 |
-| 5 | `deploy-staging` | 部署脚本 | develop 分支推送 |
-| 6 | `deploy-production` | 部署脚本 | main 分支推送 |
+详见 [CLAUDE.md](../../fe-vue2-demo/CLAUDE.md) 中的 `GitHub Actions 流水线` 部分。
 
 ### 3.2 Secrets 使用情况
 
@@ -130,17 +123,6 @@ ANTHROPIC_BASE_URL      Updated recently  （仅第三方网关需要）
 2. 是否在正确的仓库中配置
 3. Secret 值是否完整复制（无多余空格）
 4. 第三方网关的 Base URL 是否正确
-
-### Q4: 如何测试配置是否正确？
-
-手动触发 Workflow 测试：
-
-1. 进入 **Actions** 标签页
-2. 选择 **CI/CD Pipeline**
-3. 点击 **Run workflow**
-4. 选择分支后运行
-
-查看 `code-review` 或 `security` 阶段的日志，确认无认证错误。
 
 ---
 

@@ -29,6 +29,7 @@ jobs:
   lint:
     name: 代码lint检查
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -70,7 +71,7 @@ jobs:
       - name: 运行 Claude Code 代码审查 (/code-review)
         uses: anthropics/claude-code-action@beta
         with:
-          claude_code_kwargs: |
+          direct_prompt: |
             /code-review
           github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
@@ -80,36 +81,7 @@ jobs:
           ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
 
   # ===========================================
-  # 3. PR 安全扫描（调用 /91-security-review 命令）
-  # ===========================================
-  security-pr:
-    name: PR 安全扫描
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      security-events: write
-      id-token: write
-    steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: 运行 Claude Code 安全审查 (/91-security-review)
-        uses: anthropics/claude-code-action@beta
-        with:
-          claude_code_kwargs: |
-            /91-security-review
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
-          ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
-          ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
-
-  # ===========================================
-  # 4. 安全扫描（执行 ${{ env.PROJECT_PATH }}/.claude/hooks/security-review.sh 脚本）
+  # 3. 安全扫描（PR 额外调用 Claude Code AI 审查；push + PR 均执行硬性检查）
   # ===========================================
   security:
     name: 安全扫描
@@ -120,16 +92,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 运行安全审查脚本
+      - name: 检查高风险问题
         working-directory: ${{ env.PROJECT_PATH }}
-        run: bash .claude/hooks/security-review.sh
+        run: |
+          REVIEW_OUTPUT=$(bash .claude/hooks/security-review.sh 2>&1) || {
+            echo "$REVIEW_OUTPUT"
+            echo "::error::发现高风险安全问题，请修复后重新提交"
+            exit 1
+          }
+          echo "$REVIEW_OUTPUT"
 
   # ===========================================
-  # 5. 构建
+  # 4. 构建
   # ===========================================
   build:
     name: 构建
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     needs: [lint, security]
     steps:
       - name: 检出代码
@@ -150,21 +129,20 @@ jobs:
         working-directory: ${{ env.PROJECT_PATH }}
         run: npm run build
 
-      - name: 上传构建产物
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: ${{ env.PROJECT_PATH }}/dist
-          retention-days: 7
+      # - name: 上传构建产物
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: dist
+      #     path: ${{ env.PROJECT_PATH }}/dist
+      #     retention-days: 7
 
   # ===========================================
-  # 6. TODO 待验证 - 部署到 Staging（仅 develop 分支）
+  # 5. TODO 待验证 - 部署到 Staging（仅 develop 分支），不再依赖 build job
   # ===========================================
   deploy-staging:
     name: 部署到 Staging
     runs-on: ubuntu-latest
-    needs: [build]
-    if: github.ref == 'refs/heads/develop'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'pull_request' && github.base_ref == 'develop')
     environment:
       name: staging
       url: https://staging.example.com
@@ -172,11 +150,20 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 下载构建产物
-        uses: actions/download-artifact@v4
+      - name: 设置 Node.js 环境
+        uses: actions/setup-node@v4
         with:
-          name: dist
-          path: ${{ env.PROJECT_PATH }}/dist
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ${{ env.PROJECT_PATH }}/package-lock.json
+
+      - name: 安装依赖
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: npm ci
+
+      - name: 运行构建
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: npm run build
 
       - name: 部署到 Staging 环境
         run: |
@@ -198,13 +185,12 @@ jobs:
           echo "✅ Staging 部署完成（占位符，请配置实际部署命令）"
 
   # ===========================================
-  # 7. TODO 待验证 - 部署到 Production（仅 main 分支）
+  # 6. TODO 待验证 - 部署到 Production（仅 main 分支），不再依赖 build job
   # ===========================================
   deploy-production:
     name: 部署到 Production
     runs-on: ubuntu-latest
-    needs: [build]
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     environment:
       name: production
       url: https://www.example.com
@@ -212,11 +198,20 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 下载构建产物
-        uses: actions/download-artifact@v4
+      - name: 设置 Node.js 环境
+        uses: actions/setup-node@v4
         with:
-          name: dist
-          path: ${{ env.PROJECT_PATH }}/dist
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ${{ env.PROJECT_PATH }}/package-lock.json
+
+      - name: 安装依赖
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: npm ci
+
+      - name: 运行构建
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: npm run build
 
       - name: 部署到 Production 环境
         run: |
