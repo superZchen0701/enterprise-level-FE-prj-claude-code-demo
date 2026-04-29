@@ -19,8 +19,8 @@ Settings > Secrets and variables > Actions > New repository secret
 |------------|------|---------|
 | `ANTHROPIC_AUTH_TOKEN` | API 密钥（兼容 Anthropic 及第三方网关） | 从你的模型提供商获取 |
 | `ANTHROPIC_BASE_URL` | API 基础 URL（可选，第三方网关需要） | 从你的模型提供商获取 |
-| `ANTHROPIC_MODEL` | 默认模型名称（如 `qwen3.5-plus`） | 从你的模型提供商获取 |
-| `ANTHROPIC_REASONING_MODEL` | 推理模型名称（如 `qwen3.5-plus`） | 从你的模型提供商获取 |
+| `ANTHROPIC_MODEL` | 默认模型名称（如 `deepseek-v4-pro`） | 从你的模型提供商获取 |
+| `ANTHROPIC_REASONING_MODEL` | 推理模型名称（如 `deepseek-v4-pro`） | 从你的模型提供商获取 |
 
 ---
 
@@ -31,17 +31,17 @@ Settings > Secrets and variables > Actions > New repository secret
 1. 从模型提供商获取配置信息
 2. 复制以下信息：
    - **API 密钥**：`sk-xxx` 格式
-   - **Base URL**：如 `https://ai-gateway-oa.lexincloud.com/litellm`
-   - **模型名称**：如 `qwen3.5-plus`
+   - **Base URL**：如 `你的 Base URL`
+   - **模型名称**：如 `deepseek-v4-pro`
 
 3. 添加到 GitHub Secrets：
 
 | Secret 名称 | 示例值 |
 |------------|--------|
 | `ANTHROPIC_AUTH_TOKEN` | `sk-xxx` |
-| `ANTHROPIC_BASE_URL` | `https://ai-gateway-oa.lexincloud.com/litellm` |
-| `ANTHROPIC_MODEL` | `qwen3.5-plus` |
-| `ANTHROPIC_REASONING_MODEL` | `qwen3.5-plus` |
+| `ANTHROPIC_BASE_URL` | `你的 Base URL` |
+| `ANTHROPIC_MODEL` | `deepseek-v4-pro` |
+| `ANTHROPIC_REASONING_MODEL` | `deepseek-v4-pro` |
 
 ### 2.2 方案 B：使用 Anthropic 官方 API
 
@@ -107,7 +107,7 @@ ANTHROPIC_BASE_URL      Updated recently  （仅第三方网关需要）
 
 1. **获取配置信息**：
    - `ANTHROPIC_AUTH_TOKEN`: `sk-xxx`（从你的提供商获取）
-   - `ANTHROPIC_BASE_URL`: `https://ai-gateway-oa.lexincloud.com/litellm`
+   - `ANTHROPIC_BASE_URL`: `你的 Base URL`
 
 2. **添加到 GitHub Secrets**：
    - 添加 `ANTHROPIC_AUTH_TOKEN`

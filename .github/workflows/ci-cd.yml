@@ -5,8 +5,9 @@ on:
     branches:
       - main
       - develop
-      - 'feature/**'
-      - 'bugfix/**'
+      - 'feat_**'
+      - 'fix_**'
+      - 'rel_**'
   pull_request:
     branches:
       - main
@@ -23,10 +24,10 @@ env:
 
 jobs:
   # ===========================================
-  # 1. 代码检查（执行.claude/hooks/pre-commit.sh脚本）
+  # 1. 代码lint检查（执行${{ env.PROJECT_PATH }}/.claude/hooks/pre-commit.sh脚本）
   # ===========================================
   lint:
-    name: 代码检查
+    name: 代码lint检查
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码
@@ -52,13 +53,14 @@ jobs:
   # ===========================================
   # 2. PR 代码审查（仅在 PR 时触发，调用 /code-review 命令）
   # ===========================================
-  code-review:
-    name: 代码审查
+  code-review-pr:
+    name: PR 代码审查
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
       pull-requests: write
+      id-token: write
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -70,6 +72,7 @@ jobs:
         with:
           claude_code_kwargs: |
             /code-review
+          github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
@@ -77,25 +80,28 @@ jobs:
           ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
 
   # ===========================================
-  # 3. 安全扫描（调用 /security-review 命令）
+  # 3. PR 安全扫描（调用 /91-security-review 命令）
   # ===========================================
-  security:
-    name: 安全扫描
+  security-pr:
+    name: PR 安全扫描
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     permissions:
       contents: read
       security-events: write
+      id-token: write
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: 运行 Claude Code 安全审查 (/security-review)
+      - name: 运行 Claude Code 安全审查 (/91-security-review)
         uses: anthropics/claude-code-action@beta
         with:
           claude_code_kwargs: |
-            /security-review
+            /91-security-review
+          github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
@@ -103,7 +109,23 @@ jobs:
           ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
 
   # ===========================================
-  # 4. 构建
+  # 4. 安全扫描（执行 ${{ env.PROJECT_PATH }}/.claude/hooks/security-review.sh 脚本）
+  # ===========================================
+  security:
+    name: 安全扫描
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 运行安全审查脚本
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: bash .claude/hooks/security-review.sh
+
+  # ===========================================
+  # 5. 构建
   # ===========================================
   build:
     name: 构建
@@ -136,7 +158,7 @@ jobs:
           retention-days: 7
 
   # ===========================================
-  # 5. TODO 待验证 - 部署到 Staging（仅 develop 分支）
+  # 6. TODO 待验证 - 部署到 Staging（仅 develop 分支）
   # ===========================================
   deploy-staging:
     name: 部署到 Staging
@@ -176,7 +198,7 @@ jobs:
           echo "✅ Staging 部署完成（占位符，请配置实际部署命令）"
 
   # ===========================================
-  # 6. TODO 待验证 - 部署到 Production（仅 main 分支）
+  # 7. TODO 待验证 - 部署到 Production（仅 main 分支）
   # ===========================================
   deploy-production:
     name: 部署到 Production
