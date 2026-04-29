@@ -29,15 +29,8 @@ trap cleanup EXIT
 
 # ==================== 获取待扫描文件列表 ====================
 
-# 获取增量变更文件 + 未跟踪文件
-if git rev-parse HEAD >/dev/null 2>&1; then
-  {
-    git diff HEAD --name-only --diff-filter=ACMR 2>/dev/null
-    git ls-files --others --exclude-standard 2>/dev/null
-  } | sort -u > "$FILE_LIST"
-else
-  git ls-files --cached 2>/dev/null > "$FILE_LIST"
-fi
+# 获取全量已跟踪文件
+git ls-files --cached 2>/dev/null | sort -u > "$FILE_LIST"
 
 # 排除无需扫描的文件/目录
 filter_files() {
@@ -60,9 +53,35 @@ filter_files() {
     grep -v '\.njsproj$' | \
     grep -v '\.sln$' | \
     grep -v '\.sw.' | \
+    \
     grep -v 'package-lock\.json$' | \
-    grep -v '\.claude/settings\.local\.json' | \
-    grep -v '\.claude/.*\.local\.'
+    grep -v 'package\.json$' | \
+    \
+    grep -v '\.claude/' | \
+    grep -v 'openspec/' | \
+    grep -v 'docs/' | \
+    \
+    grep -v '\.md$' | \
+    grep -v '\.yaml$' | \
+    grep -v '\.yml$' | \
+    grep -v '\.env\.example$' | \
+    \
+    grep -v 'babel\.config\.js$' | \
+    grep -v 'jsconfig\.json$' | \
+    grep -v 'vue\.config\.js$' | \
+    grep -v '\.gitignore$' | \
+    grep -v '\.mcp\.json$' | \
+    \
+    grep -v '\.png$' | \
+    grep -v '\.ico$' | \
+    grep -v '\.svg$' | \
+    grep -v '\.jpe\?g$' | \
+    grep -v '\.gif$' | \
+    grep -v '\.bmp$' | \
+    \
+    grep -v '\.woff2\?$' | \
+    grep -v '\.ttf$' | \
+    grep -v '\.eot$'
 }
 
 filter_files "$FILE_LIST" > "${FILE_LIST}.filtered"

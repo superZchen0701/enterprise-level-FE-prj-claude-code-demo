@@ -54,12 +54,12 @@ bash .claude/hooks/install-git-hooks.sh
 
 | 阶段 | 名称 | 调用命令 | 触发条件 |
 |------|------|----------|----------|
-| 1 | 代码检查 | `bash .claude/hooks/pre-commit.sh` | 所有 PR 和推送 |
+| 1 | 代码检查 | `bash .claude/hooks/pre-commit.sh` | 仅推送 |
 | 2 | 代码审查 | `/code-review` | 仅 PR |
-| 3 | 安全扫描 | `/security-review` | 所有 PR 和推送 |
-| 4 | 构建 | `npm run build` | 所有 PR 和推送 |
-| 5 | Staging 部署 | 部署脚本 | develop 分支推送 |
-| 6 | Production 部署 | 部署脚本 | main 分支推送 |
+| 3 | 安全扫描 | `bash .claude/hooks/security-review.sh` | 所有 PR 和推送 |
+| 4 | 构建 | `npm run build` | 仅推送 |
+| 5 | Staging 部署 | 部署脚本 | develop 分支推送 / PR |
+| 6 | Production 部署 | 部署脚本 | main 分支 PR |
 
 ### 配置文件
 
