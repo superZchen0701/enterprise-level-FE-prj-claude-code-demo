@@ -74,7 +74,7 @@ jobs:
         working-directory: ${{ env.PROJECT_PATH }}
         run: |
           npm install -g @anthropic-ai/claude-code
-          claude -p "请严格按照 .claude/skills/code-review/skill.md 中的步骤执行代码审查"
+          claude -p --permission-mode auto --max-turns 20 --verbose "请严格按照 .claude/skills/pr-code-review/skill.md 中的步骤执行代码审查"
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
