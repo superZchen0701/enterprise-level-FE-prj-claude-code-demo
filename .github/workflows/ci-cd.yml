@@ -73,7 +73,7 @@ jobs:
       - name: 运行 Claude Code 代码审查 (/code-review)
         uses: anthropics/claude-code-action@v1
         with:
-          prompt: /code-review
+          command: "/code-review"
           anthropic_api_key: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
