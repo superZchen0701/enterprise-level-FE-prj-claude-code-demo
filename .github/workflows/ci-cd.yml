@@ -45,7 +45,9 @@ jobs:
 
       - name: 安装依赖
         working-directory: ${{ env.PROJECT_PATH }}
-        run: npm ci
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: 运行 pre-commit 检查
         working-directory: ${{ env.PROJECT_PATH }}
@@ -69,19 +71,18 @@ jobs:
           fetch-depth: 0
 
       - name: 运行 Claude Code 代码审查 (/code-review)
-        uses: anthropics/claude-code-action@beta
-        with:
-          direct_prompt: |
-            /code-review
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ${{ env.PROJECT_PATH }}
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude -p --dangerously-skip-permissions --max-turns 30 --verbose "请阅读当前目录下的 .claude/skills/pr-code-review/skill.md 文件，严格按照其中的步骤执行 PR 代码审查，完成后输出完整的审查报告"
         env:
-          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
           ANTHROPIC_MODEL: ${{ secrets.ANTHROPIC_MODEL }}
           ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
 
   # ===========================================
-  # 3. 安全扫描（PR 额外调用 Claude Code AI 审查；push + PR 均执行硬性检查）
+  # 3. 安全扫描（执行${{ env.PROJECT_PATH }}/.claude/hooks/security-review.sh脚本）
   # ===========================================
   security:
     name: 安全扫描
@@ -123,7 +124,9 @@ jobs:
 
       - name: 安装依赖
         working-directory: ${{ env.PROJECT_PATH }}
-        run: npm ci
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: 运行构建
         working-directory: ${{ env.PROJECT_PATH }}
@@ -142,7 +145,7 @@ jobs:
   deploy-staging:
     name: 部署到 Staging
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'pull_request' && github.base_ref == 'develop')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     environment:
       name: staging
       url: https://staging.example.com
@@ -159,7 +162,9 @@ jobs:
 
       - name: 安装依赖
         working-directory: ${{ env.PROJECT_PATH }}
-        run: npm ci
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: 运行构建
         working-directory: ${{ env.PROJECT_PATH }}
@@ -190,7 +195,7 @@ jobs:
   deploy-production:
     name: 部署到 Production
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: production
       url: https://www.example.com
@@ -207,7 +212,9 @@ jobs:
 
       - name: 安装依赖
         working-directory: ${{ env.PROJECT_PATH }}
-        run: npm ci
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: 运行构建
         working-directory: ${{ env.PROJECT_PATH }}
