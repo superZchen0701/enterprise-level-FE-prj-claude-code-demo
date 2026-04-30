@@ -33,8 +33,6 @@
 │   ├── skills/                  # 自定义技能
 │   ├── hooks/                   # 自动化钩子
 │   └── settings.json            # 权限与 hook 配置
-├── .github/                     # GitHub 配置
-│   └── workflows/               # CI/CD 流水线
 ├── docs/                        # 项目文档
 │   └── ai-context/              # AI 上下文文档
 ├── .env.development             # 开发环境变量

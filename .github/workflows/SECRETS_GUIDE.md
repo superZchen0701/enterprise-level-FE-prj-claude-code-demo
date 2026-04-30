@@ -19,8 +19,8 @@ Settings > Secrets and variables > Actions > New repository secret
 |------------|------|---------|
 | `ANTHROPIC_AUTH_TOKEN` | API 密钥（兼容 Anthropic 及第三方网关） | 从你的模型提供商获取 |
 | `ANTHROPIC_BASE_URL` | API 基础 URL（可选，第三方网关需要） | 从你的模型提供商获取 |
-| `ANTHROPIC_MODEL` | 默认模型名称（如 `qwen3.5-plus`） | 从你的模型提供商获取 |
-| `ANTHROPIC_REASONING_MODEL` | 推理模型名称（如 `qwen3.5-plus`） | 从你的模型提供商获取 |
+| `ANTHROPIC_MODEL` | 默认模型名称（如 `deepseek-v4-pro`） | 从你的模型提供商获取 |
+| `ANTHROPIC_REASONING_MODEL` | 推理模型名称（如 `deepseek-v4-pro`） | 从你的模型提供商获取 |
 
 ---
 
@@ -31,17 +31,17 @@ Settings > Secrets and variables > Actions > New repository secret
 1. 从模型提供商获取配置信息
 2. 复制以下信息：
    - **API 密钥**：`sk-xxx` 格式
-   - **Base URL**：如 `https://ai-gateway-oa.lexincloud.com/litellm`
-   - **模型名称**：如 `qwen3.5-plus`
+   - **Base URL**：如 `你的 Base URL`
+   - **模型名称**：如 `deepseek-v4-pro`
 
 3. 添加到 GitHub Secrets：
 
 | Secret 名称 | 示例值 |
 |------------|--------|
 | `ANTHROPIC_AUTH_TOKEN` | `sk-xxx` |
-| `ANTHROPIC_BASE_URL` | `https://ai-gateway-oa.lexincloud.com/litellm` |
-| `ANTHROPIC_MODEL` | `qwen3.5-plus` |
-| `ANTHROPIC_REASONING_MODEL` | `qwen3.5-plus` |
+| `ANTHROPIC_BASE_URL` | `你的 Base URL` |
+| `ANTHROPIC_MODEL` | `deepseek-v4-pro` |
+| `ANTHROPIC_REASONING_MODEL` | `deepseek-v4-pro` |
 
 ### 2.2 方案 B：使用 Anthropic 官方 API
 
@@ -79,14 +79,7 @@ ANTHROPIC_BASE_URL      Updated recently  （仅第三方网关需要）
 
 ### 3.1 流水线阶段
 
-| 阶段 | 名称 | 调用命令 | 触发条件 |
-|------|------|----------|----------|
-| 1 | `lint` | `bash .claude/hooks/pre-commit.sh` | 所有 PR 和推送 |
-| 2 | `code-review` | `/code-review` | 仅 PR |
-| 3 | `security` | `/security-review` | 所有 PR 和推送 |
-| 4 | `build` | `npm run build` | 所有 PR 和推送 |
-| 5 | `deploy-staging` | 部署脚本 | develop 分支推送 |
-| 6 | `deploy-production` | 部署脚本 | main 分支推送 |
+详见 [CLAUDE.md](../../fe-vue2-demo/CLAUDE.md) 中的 `GitHub Actions 流水线` 部分。
 
 ### 3.2 Secrets 使用情况
 
@@ -107,7 +100,7 @@ ANTHROPIC_BASE_URL      Updated recently  （仅第三方网关需要）
 
 1. **获取配置信息**：
    - `ANTHROPIC_AUTH_TOKEN`: `sk-xxx`（从你的提供商获取）
-   - `ANTHROPIC_BASE_URL`: `https://ai-gateway-oa.lexincloud.com/litellm`
+   - `ANTHROPIC_BASE_URL`: `你的 Base URL`
 
 2. **添加到 GitHub Secrets**：
    - 添加 `ANTHROPIC_AUTH_TOKEN`
@@ -130,17 +123,6 @@ ANTHROPIC_BASE_URL      Updated recently  （仅第三方网关需要）
 2. 是否在正确的仓库中配置
 3. Secret 值是否完整复制（无多余空格）
 4. 第三方网关的 Base URL 是否正确
-
-### Q4: 如何测试配置是否正确？
-
-手动触发 Workflow 测试：
-
-1. 进入 **Actions** 标签页
-2. 选择 **CI/CD Pipeline**
-3. 点击 **Run workflow**
-4. 选择分支后运行
-
-查看 `code-review` 或 `security` 阶段的日志，确认无认证错误。
 
 ---
 
