@@ -81,7 +81,8 @@ fe-vue2-demo/
 ├── .claude/                     # Claude Code 配置
 │   ├── commands/                # 自定义命令
 │   ├── skills/                  # 自定义技能
-│   └── hooks/                   # 自动化钩子
+│   ├── hooks/                   # 自动化钩子
+│   └── settings.json            # 权限和工具配置
 ├── docs/                        # 项目文档
 │   └── ai-context/              # AI 上下文文档
 ├── .env.development             # 开发环境变量
