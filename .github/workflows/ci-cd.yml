@@ -54,7 +54,7 @@ jobs:
         run: bash .claude/hooks/pre-commit.sh
 
   # ===========================================
-  # 2. PR 代码审查（仅在 PR 时触发，调用 /code-review 命令）
+  # 2. PR 代码审查（仅在 PR 时触发）
   # ===========================================
   code-review-pr:
     name: PR 代码审查
@@ -70,7 +70,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 运行 Claude Code 代码审查 (/code-review)
+      - name: 运行 Claude Code 代码审查
         working-directory: ${{ env.PROJECT_PATH }}
         run: |
           npm install -g @anthropic-ai/claude-code
