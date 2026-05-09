@@ -70,7 +70,7 @@ props: ['title', 'count']
 
 ### ESLint 规则
 - `plugin:vue/essential` + `eslint:recommended`
-- 使用 `npm run lint` 进行检查和修复
+- 使用 `pnpm run lint` 进行检查和修复
 
 ### 注释规范
 - 复杂逻辑必须添加中文注释
@@ -145,7 +145,7 @@ import { mockData } from '@/mock/data'
 - `chore`: 构建/工具相关
 
 ### 分支命名
-- 功能分支：`feature_xxx_<tapdID>`
+- 功能分支：`feat_xxx_<tapdID>`
 - 修复分支：`fix_xxx_<tapdID>`
 - 重构分支：`refactor_xxx_<tapdID>`
 

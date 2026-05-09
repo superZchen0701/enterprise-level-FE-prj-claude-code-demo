@@ -6,32 +6,13 @@
 
 ## 项目简介
 
-本项目是一个企业级前端项目的 Claude Code 示范仓库，展示如何在实际项目中使用 Claude Code 进行高效开发。仓库包含一个完整的 Vue 2 移动端应用示例，涵盖项目架构、编码规范、开发流程等最佳实践。
-
-## 仓库结构
-
-| 目录 | 说明 |
-|------|------|
-| `fe-vue2-demo/` | 基于 Vue 2 + Vant 的移动端 H5 应用 |
-| `README.md` | 中文说明文档 |
-| `README.en.md` | English Documentation |
-
-## 开发指南
-
-### 环境要求
-
-- Node.js >= 20.19.0
-- npm >= 10.1.0
-
-### 推荐工具
-
-- Claude Code
+本项目是一个企业级前端项目的 Claude Code 示范仓库，展示如何在实际项目中使用 Claude Code 进行高效开发。仓库使用 pnpm monorepo 管理多个子项目，包含：Vue 2 移动端应用示例、Vue 3 移动端应用示例。涵盖项目架构、编码规范、开发流程等最佳实践。
 
 ## Claude Code新成员入职清单
 
 ### 第1步：环境准备
 
-- [ ] 安装Git、Node.js、npm、OpenSpec。
+- [ ] 安装Git、Node.js、pnpm、OpenSpec。
 - [ ] 安装Claude Code（参考[Claude Code 官方文档-快速开始-步骤1：安装ClaudeCode](https://code.claude.com/docs/zh-CN/quickstart)）。
 - [ ] 使用CC Switch管理多套API模型配置（参考[cc-switch](https://github.com/farion1231/cc-switch)）。
 
@@ -50,16 +31,72 @@
 
 ### 第4步：开发新功能
 
-- [ ] 本地运行`npm install`安装依赖，确保项目依赖正常；运行`npm run serve`启动开发服务。
+- [ ] 本地创建feat_xxx_tapdID分支，xx为新功能名称，tapdID为Tapd任务ID。
+- [ ] 在子项目目录下运行`pnpm run serve`，启动开发服务。
 - [ ] 尝试使用OpenSpec指令进行新功能开发（输入“/opsx:propose 我需要开发新功能：搜索功能，可以在兑换记录页面搜索兑换码。要求如下：1.使用 Vant 的 Search 组件。2.支持实时搜索。”）。
-- [ ] 本地运行相关npm命令（如`npm run lint`、`npm run serve`、`npm run build`等），检查新功能是否正常运行。
-- [ ] 提交一个测试PR验证CI流程。
+- [ ] 在子项目目录下运行相关pnpm命令（`pnpm run serve`、`pnpm run lint`、`pnpm run build`等），检查新功能是否正常运行。
+- [ ] 提交代码至Git仓库：输入“帮我总结变更并提交代码”，按提示操作即可。
+- [ ] 创建PR：feat_xxx_tapdID分支至develop分支；创建PR：develop分支至main主分支；验证CI/CD流程。
+
+## 仓库结构
+
+| 目录 | 说明 |
+|------|------|
+| `fe-vue2-demo/` | 基于 Vue 2 + Vant 2 的移动端 H5 应用 |
+| `fe-vue3-demo/` | 基于 Vue 3 + Vant 4 的移动端 H5 应用 |
+| `package.json` | 项目根目录下的 package.json 文件，包含所有子项目的执行命令 |
+| `.gitignore` | 项目根目录下的 Git 忽略文件，用于忽略不需要提交的文件 |
+| `.npmrc` | 项目根目录下的 npm 配置文件，用于设置全局配置 |
+| `deploy.sh` | .github/workflows/ci-cd.yml 中的部署脚本，用于CI/CD流水线中部署项目至相应的环境中 |
+| `install.sh` | 一键安装脚本，用于安装项目环境需要的依赖 |
+| `README.md` | 中文说明文档 |
+| `README.en.md` | English Documentation |
+| `pnpm-workspace.yaml` | pnpm monorepo 工作区配置 |
+
+## 开发指南
+
+### 环境要求
+
+- Node.js >= 20.x
+- pnpm >= 10.x
+
+### 推荐工具
+
+- Claude Code
+- pnpm（monorepo 包管理器）
+
+## pnpm Monorepo
+
+本项目使用 pnpm workspace 管理多个子项目，实现统一依赖管理。
+
+### 安装依赖
+
+```bash
+# 在根目录下安装所有子项目的依赖
+pnpm install
+```
+
+### 常用命令
+
+```bash
+# 启动 Vue 2 开发服务
+pnpm run dev:vue2
+
+# 启动 Vue 3 开发服务
+pnpm run dev:vue3
+
+# 代码检查所有项目
+pnpm run lint
+
+# 构建所有项目
+pnpm run build
+```
 
 ## 子项目
 
 ### fe-vue2-demo
 
-基于 Vue 2 + Vant 的移动端应用。
+基于 Vue 2 + Vant 2 的移动端应用。
 
 **技术栈：**
 
@@ -74,18 +111,7 @@
 
 ```bash
 cd fe-vue2-demo
-
-# 安装依赖
-npm install
-
-# 开发服务
-npm run serve
-
-# 代码检查
-npm run lint
-
-# 生产构建
-npm run build
+pnpm run serve
 ```
 
 **项目文档：**
@@ -99,5 +125,39 @@ npm run build
 **相关资源：**
 
 - [Vue 2 官方文档](https://v2.vuejs.org/)
-- [Vant 2 组件库](https://vant-contrib.gitee.io/vant/v2/)
+- [Vant 2 组件库](https://vant-ui.github.io/vant/v2/#/zh-CN/)
 - [Vue CLI 文档](https://cli.vuejs.org/)
+
+### fe-vue3-demo
+
+基于 Vue 3 + Vant 4 的移动端应用（Composition API + Vite）。
+
+**技术栈：**
+
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| Vue | 3.5.x | 前端框架（Composition API） |
+| Vue Router | 4.x | 路由管理 |
+| Vant | 4.x | 移动端 UI 组件库 |
+| Vite | 6.x | 构建工具 |
+
+**快速开始：**
+
+```bash
+cd fe-vue3-demo
+pnpm run serve
+```
+
+**项目文档：**
+
+详见：[fe-vue3-demo/README.md](fe-vue3-demo/README.md)
+
+**Claude Code 配置：**
+
+详见：[fe-vue3-demo/CLAUDE.md](fe-vue3-demo/CLAUDE.md)
+
+**相关资源：**
+
+- [Vue 3 官方文档](https://cn.vuejs.org/)
+- [Vant 4 组件库](https://vant-ui.github.io/vant/#/zh-CN)
+- [Vite 文档](https://cn.vitejs.dev/)

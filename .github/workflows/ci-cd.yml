@@ -20,11 +20,10 @@ concurrency:
 
 env:
   NODE_VERSION: '20.19.0'
-  PROJECT_PATH: 'fe-vue2-demo'
 
 jobs:
   # ===========================================
-  # 1. 代码lint检查（执行${{ env.PROJECT_PATH }}/.claude/hooks/pre-commit.sh脚本）
+  # 1. 代码lint检查（执行.claude/hooks/pre-commit.sh脚本）
   # ===========================================
   lint:
     name: 代码lint检查
@@ -40,17 +39,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: ${{ env.PROJECT_PATH }}/package-lock.json
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
 
       - name: 安装依赖
-        working-directory: ${{ env.PROJECT_PATH }}
-        run: |
-          rm -f package-lock.json
-          npm install
+        run: pnpm install
 
       - name: 运行 pre-commit 检查
-        working-directory: ${{ env.PROJECT_PATH }}
         run: bash .claude/hooks/pre-commit.sh
 
   # ===========================================
@@ -71,7 +70,6 @@ jobs:
           fetch-depth: 0
 
       - name: 运行 Claude Code 代码审查
-        working-directory: ${{ env.PROJECT_PATH }}
         run: |
           npm install -g @anthropic-ai/claude-code
           claude -p --dangerously-skip-permissions --max-turns 30 --verbose "请阅读当前目录下的 .claude/skills/pr-code-review/skill.md 文件，严格按照其中的步骤执行 PR 代码审查，完成后输出完整的审查报告"
@@ -82,7 +80,7 @@ jobs:
           ANTHROPIC_REASONING_MODEL: ${{ secrets.ANTHROPIC_REASONING_MODEL }}
 
   # ===========================================
-  # 3. 安全扫描（执行${{ env.PROJECT_PATH }}/.claude/hooks/security-review.sh脚本）
+  # 3. 安全扫描（执行.claude/hooks/security-review.sh脚本）
   # ===========================================
   security:
     name: 安全扫描
@@ -94,7 +92,6 @@ jobs:
           fetch-depth: 0
 
       - name: 检查高风险问题
-        working-directory: ${{ env.PROJECT_PATH }}
         run: |
           REVIEW_OUTPUT=$(bash .claude/hooks/security-review.sh 2>&1) || {
             echo "$REVIEW_OUTPUT"
@@ -119,24 +116,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: ${{ env.PROJECT_PATH }}/package-lock.json
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
 
       - name: 安装依赖
-        working-directory: ${{ env.PROJECT_PATH }}
-        run: |
-          rm -f package-lock.json
-          npm install
+        run: pnpm install
 
       - name: 运行构建
-        working-directory: ${{ env.PROJECT_PATH }}
-        run: npm run build
+        run: pnpm run build
 
       # - name: 上传构建产物
       #   uses: actions/upload-artifact@v4
       #   with:
       #     name: dist
-      #     path: ${{ env.PROJECT_PATH }}/dist
+      #     path: dist
       #     retention-days: 7
 
   # ===========================================
@@ -157,18 +154,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: ${{ env.PROJECT_PATH }}/package-lock.json
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
 
       - name: 安装依赖
-        working-directory: ${{ env.PROJECT_PATH }}
-        run: |
-          rm -f package-lock.json
-          npm install
+        run: pnpm install
 
       - name: 运行构建
-        working-directory: ${{ env.PROJECT_PATH }}
-        run: npm run build
+        run: pnpm run build
 
       - name: 部署到 Staging 环境
         run: |
@@ -179,13 +176,13 @@ jobs:
 
           # TODO: 在此处添加实际的部署命令
           # 示例：使用 rsync 部署到远程服务器
-          # rsync -avz --delete ./fe-vue2-demo/dist/ user@staging-server:/var/www/staging/
+          # rsync -avz --delete ./子项目/dist/ user@staging-server:/var/www/staging/
 
           # 示例：使用 SSH 部署
           # ssh user@staging-server "cd /var/www/staging && ./deploy.sh"
 
           # 示例：部署到静态托管（如 Netlify、Vercel、阿里云 OSS 等）
-          # netlify deploy --prod --dir=fe-vue2-demo/dist
+          # netlify deploy --prod --dir=子项目/dist
 
           echo "✅ Staging 部署完成（占位符，请配置实际部署命令）"
 
@@ -207,18 +204,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: ${{ env.PROJECT_PATH }}/package-lock.json
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
 
       - name: 安装依赖
-        working-directory: ${{ env.PROJECT_PATH }}
-        run: |
-          rm -f package-lock.json
-          npm install
+        run: pnpm install
 
       - name: 运行构建
-        working-directory: ${{ env.PROJECT_PATH }}
-        run: npm run build
+        run: pnpm run build
 
       - name: 部署到 Production 环境
         run: |
@@ -229,12 +226,12 @@ jobs:
 
           # TODO: 在此处添加实际的部署命令
           # 示例：使用 rsync 部署到远程服务器
-          # rsync -avz --delete ./fe-vue2-demo/dist/ user@prod-server:/var/www/production/
+          # rsync -avz --delete ./子项目/dist/ user@prod-server:/var/www/production/
 
           # 示例：使用 SSH 部署
           # ssh user@prod-server "cd /var/www/production && ./deploy.sh"
 
           # 示例：部署到静态托管（如 Netlify、Vercel、阿里云 OSS 等）
-          # netlify deploy --prod --dir=fe-vue2-demo/dist
+          # netlify deploy --prod --dir=子项目/dist
 
           echo "✅ Production 部署完成（占位符，请配置实际部署命令）"

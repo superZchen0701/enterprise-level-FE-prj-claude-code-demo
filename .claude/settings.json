@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Grep",
+      "Glob",
+      "WebSearch",
+      "WebFetch",
+      "Bash(pnpm run *)",
+      "Bash(pnpm install)",
+      "Bash(pnpm run lint)",
+      "Bash(pnpm *)",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git ls-files*)",
+      "Bash(grep*)"
+    ],
+    "deny": [
+      "Read(./.env*)",
+      "Write(./.env*)",
+      "Read(**/secrets/**)",
+      "Write(**/secrets/**)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf *)",
+      "Bash(git push --force)",
+      "Bash(git reset --hard)",
+      "Bash(sudo *)",
+      "Bash(curl * | bash)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/keyword-trigger.js",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/pre-commit.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

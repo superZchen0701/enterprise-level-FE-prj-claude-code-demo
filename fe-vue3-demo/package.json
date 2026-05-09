@@ -1,0 +1,57 @@
+{
+  "name": "fe-vue3-demo",
+  "description": "前端Vue3示例项目",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "serve": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.ts --fix",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "vant": "^4.9.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitejs/plugin-vue": "^5.2.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.32.0",
+    "typescript": "~5.5.0",
+    "vite": "^6.0.0",
+    "vue-tsc": "^2.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "browser": true,
+      "es2022": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "plugins": ["@typescript-eslint"],
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+      "parser": "@typescript-eslint/parser",
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": "warn",
+      "no-debugger": "error",
+      "no-unused-vars": "off",
+      "no-undef": "off",
+      "@typescript-eslint/no-unused-vars": "warn"
+    }
+  }
+}
