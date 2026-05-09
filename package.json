@@ -1,0 +1,24 @@
+{
+  "name": "enterprise-level-fe-prj-claude-code-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "企业级前端项目 Claude Code Demo 仓库，使用 pnpm + monorepo 管理子项目",
+  "keywords": [
+    "enterprise-level",
+    "frontend",
+    "vue2",
+    "vue3",
+    "monorepo",
+    "pnpm"
+  ],
+  "scripts": {
+    "dev:vue2": "pnpm -C fe-vue2-demo run serve",
+    "dev:vue3": "pnpm -C fe-vue3-demo run serve",
+    "lint:vue2": "pnpm -C fe-vue2-demo run lint",
+    "lint:vue3": "pnpm -C fe-vue3-demo run lint",
+    "build:vue2": "pnpm -C fe-vue2-demo run build",
+    "build:vue3": "pnpm -C fe-vue3-demo run build",
+    "lint": "pnpm -r run lint",
+    "build": "pnpm -r run build"
+  }
+}

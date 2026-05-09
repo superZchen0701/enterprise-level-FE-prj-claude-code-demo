@@ -1,7 +1,7 @@
 #!/bin/bash
 # install.sh - 团队 Claude 配置一键安装脚本
 # 作者：chaozhi
-# 版本：1.1
+# 版本：1.0
 
 set -e
 
@@ -9,7 +9,7 @@ set -e
 # 子项目列表（后续可扩展）
 declare -a SUB_PROJECTS=(
     "fe-vue2-demo"
-    # "be-koa3-bff-demo"  # 示例：未来可能的 Koa 3 BFF 项目
+    "fe-vue3-demo"
 )
 
 # ==================== 颜色定义 ====================
@@ -66,7 +66,7 @@ detect_os() {
 
 # ==================== 检查依赖 ====================
 check_dependencies() {
-    log_info "检查必要依赖..."
+    log_info "一、检查必要依赖..."
 
     # 1. 检查 Git
     if ! command -v git &> /dev/null; then
@@ -85,23 +85,24 @@ check_dependencies() {
     # Node.js 版本检查 >= 20.xx.xx
     NODE_VERSION=$(node --version | sed 's/v//' | cut -d. -f1)
     if [ "$NODE_VERSION" -lt 20 ]; then
-        log_error "Node.js 版本过低 (当前：$(node --version))，要求 >= 20.19.0"
+        log_error "Node.js 版本过低 (当前：$(node --version))，要求 >= 20.xx.xx"
         exit 1
     fi
     log_success "Node.js 已安装：$(node --version)"
 
-    # 3. 检查 npm 是否安装
-    if ! command -v npm &> /dev/null; then
-        log_error "未安装 npm"
+    # 3. 检查 pnpm 是否安装
+    if ! command -v pnpm &> /dev/null; then
+        log_error "未安装 pnpm，将使用 npm 安装 pnpm"
+        npm install -g pnpm
+    fi
+    # pnpm 版本检查 >= 10.xx.xx
+    PNPM_VERSION=$(pnpm --version | cut -d. -f1)
+    if [ "$PNPM_VERSION" -lt 10 ]; then
+        log_error "pnpm 版本过低 (当前：$(pnpm --version))，要求 >= 10.xx.xx"
+        log_info "升级命令：npm install -g pnpm@latest"
         exit 1
     fi
-    # npm 版本检查 >= 10.xx.xx
-    NPM_VERSION=$(npm --version | cut -d. -f1)
-    if [ "$NPM_VERSION" -lt 10 ]; then
-        log_error "npm 版本过低 (当前：$(npm --version))，要求 >= 10.1.0"
-        exit 1
-    fi
-    log_success "npm 已安装：$(npm --version)"
+    log_success "pnpm 已安装：$(pnpm --version)"
 
     # 4. 检查是否全局安装了 OpenSpec
     log_info "检查 OpenSpec 安装状态..."
@@ -117,30 +118,31 @@ check_dependencies() {
 
 # ==================== 安装 Git Hooks ====================
 install_git_hooks() {
-    log_info "安装 Git Hooks..."
+    log_info "二、安装 Git Hooks..."
 
-    # 查找 Git Hooks 安装脚本
-    local hooks_script=""
+    local hooks_scripts=()
 
-    # 查找当前目录下的 Git Hooks 安装脚本
+    # 根目录的 Git Hooks 安装脚本（主脚本，包含所有公共 hooks）
     if [ -f ".claude/hooks/install-git-hooks.sh" ]; then
-        hooks_script=".claude/hooks/install-git-hooks.sh"
+        hooks_scripts+=(".claude/hooks/install-git-hooks.sh")
     fi
 
-    # 查找子项目中的 Git Hooks 安装脚本
-    for project in "${SUB_PROJECTS[@]}"; do
-        if [ -f "$project/.claude/hooks/install-git-hooks.sh" ]; then
-            hooks_script="$project/.claude/hooks/install-git-hooks.sh"
-            break
-        fi
-    done
+    if [ ${#hooks_scripts[@]} -gt 0 ]; then
+        local all_success=true
+        for hooks_script in "${hooks_scripts[@]}"; do
+            log_info "执行：$hooks_script"
+            if bash "$hooks_script"; then
+                log_success "  $hooks_script 执行成功"
+            else
+                log_error "  $hooks_script 执行失败"
+                all_success=false
+            fi
+        done
 
-    if [ -n "$hooks_script" ]; then
-        # 执行安装脚本
-        if bash "$hooks_script"; then
+        if $all_success; then
             log_success "Git Hooks 安装成功"
         else
-            log_error "Git Hooks 安装失败"
+            log_error "部分 Git Hooks 安装失败"
             return 1
         fi
     else
@@ -152,15 +154,14 @@ install_git_hooks() {
 # MCP 配置说明：
 # - .mcp.json 用于配置 MCP 服务器，让 Claude Code 可以调用外部工具/API
 # - 如果项目需要特定的 MCP 服务（如数据库、API 调试等），在此处进行配置
-# - 检查根目录和所有子项目的 .mcp.json 配置
+# - 仅检查根目录下的 .mcp.json 配置
 configure_mcp() {
-    log_info "检查 MCP 配置..."
+    log_info "三、检查 MCP 配置..."
 
     local mcp_found=0
     local mcp_invalid=0
 
     # 验证 JSON 格式的辅助函数（使用 Node.js）
-    # 修复：使用 process.argv 传递文件路径，避免命令注入
     validate_json() {
         local file="$1"
         node -e "JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))" -- "$file" 2>/dev/null
@@ -179,28 +180,14 @@ configure_mcp() {
         mcp_found=1
     fi
 
-    # 检查各子项目的 .mcp.json
-    for project in "${SUB_PROJECTS[@]}"; do
-        if [ -f "$project/.mcp.json" ]; then
-            log_info "发现子项目 MCP 配置文件：$project/.mcp.json"
-            if validate_json "$project/.mcp.json"; then
-                log_success "  [x] $project/.mcp.json 格式有效"
-            else
-                log_warn "  [!] $project/.mcp.json 格式可能无效"
-                mcp_invalid=1
-            fi
-            mcp_found=1
-        fi
-    done
-
     # 汇总报告
     if [ $mcp_found -eq 0 ]; then
         log_info "未发现 .mcp.json 配置文件（可选配置，非必需）"
-        log_info "如需配置 MCP 服务器，可在根目录或子项目目录创建 .mcp.json"
+        log_info "如需配置 MCP 服务器，可在根目录创建 .mcp.json"
     elif [ $mcp_invalid -eq 1 ]; then
-        log_warn "部分 MCP 配置文件格式可能无效，请检查"
+        log_warn "MCP 配置文件格式可能无效，请检查"
     else
-        log_success "所有 MCP 配置文件检查通过"
+        log_success "MCP 配置文件检查通过"
     fi
 }
 
@@ -217,9 +204,9 @@ show_usage() {
     echo "  [x] MCP 配置检查"
     echo ""
     echo "下一步操作:"
-    echo "  1. 进入项目目录：cd fe-vue2-demo"
+    echo "  1. 安装依赖：pnpm install"
     echo "  2. 运行 Claude Code: claude"
-    echo "  3. 参考[fe-vue2-demo/README.md子项目说明文档](fe-vue2-demo/README.md)开始开发"
+    echo "  3. 参考子项目(${SUB_PROJECTS[*]}) README.md 开始开发"
     echo ""
     echo "更多信息请查看："
     echo "  - README.md - 项目说明文档"

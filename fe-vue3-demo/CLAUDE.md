@@ -1,22 +1,24 @@
-# Vue2 移动端项目 - Claude Code 配置
+# Vue3 移动端项目 - Claude Code 配置
 
-> 自动化规则、通用配置、技能/命令列表、命名规范等见仓库根目录 `CLAUDE.md`。本文档仅包含 Vue2 项目特有内容。
+> 自动化规则、通用配置、技能/命令列表、命名规范等见仓库根目录 `CLAUDE.md`。本文档仅包含 Vue3 项目特有内容。
 
 ## 快速参考
 
 ### 核心命令
 ```bash
 pnpm install          # 安装依赖
+pnpm run dev          # 开发服务（热更新，默认开启 mock）
 pnpm run serve        # 开发服务（热更新，默认开启 mock）
 pnpm run build        # 生产构建
 pnpm run lint         # 代码检查与修复
+pnpm run typecheck    # TypeScript 类型检查
 ```
 
 ### 环境配置
 | 文件 | 用途 |
 |------|------|
-| `.env.development` | 开发环境（默认 `VUE_APP_USE_MOCK=true`） |
-| `.env.production` | 生产环境（`VUE_APP_USE_MOCK=false`） |
+| `.env.development` | 开发环境（默认 `VITE_USE_MOCK=true`） |
+| `.env.production` | 生产环境（`VITE_USE_MOCK=false`） |
 
 ---
 
