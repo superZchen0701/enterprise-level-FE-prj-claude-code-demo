@@ -91,7 +91,7 @@
 - `babel.config.js`：使用 Vue CLI preset
 
 ### 代码质量
-- `npm run lint`：检查并自动修复
+- `pnpm run lint`：检查并自动修复
 - Pre-commit hook：提交前自动检查
 
 ## 相关文档
