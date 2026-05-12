@@ -1,0 +1,28 @@
+.claude/hooks/pre-commit.sh
+  45eb6ad207bd32dc 69-76,85-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "e09439420eb69400227ab2977c8bf624bd7ee29e",
+  "prompts": {
+    "45eb6ad207bd32dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7726830c-6fbd-4e25-a510-b5ed4825e382",
+        "model": "qwen3.6-plus"
+      },
+      "human_author": "zhizhichen",
+      "messages": [],
+      "total_additions": 16,
+      "total_deletions": 9,
+      "accepted_lines": 13,
+      "overriden_lines": 0,
+      "messages_url": "http://10.9.63.227:8000/cas/ade35c22a55e1b5aa8eaf3c0b69c8a6f68b3c6e6f05fcd406a8589a63dfae36e",
+      "custom_attributes": {
+        "user": "zhizhichen",
+        "team": "消金研发中心"
+      }
+    }
+  }
+}
