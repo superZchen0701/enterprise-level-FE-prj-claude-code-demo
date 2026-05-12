@@ -30,37 +30,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import type { ExchangeRecord } from '@/mock'
-import { getExchangeRecords } from '@/api/exchange'
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import type { ExchangeRecord } from '@/mock';
+import { getExchangeRecords } from '@/api/exchange';
 
-const router = useRouter()
-const records = ref<ExchangeRecord[]>([])
-const loading = ref<boolean>(false)
+const router = useRouter();
+const records = ref<ExchangeRecord[]>([]);
+const loading = ref<boolean>(false);
 
 function fetchRecords(): void {
-  loading.value = true
+  loading.value = true;
   getExchangeRecords()
     .then(data => {
-      records.value = data.list
+      records.value = data.list;
     })
     .catch(err => {
-      showToast((err as Error).message || '获取数据失败')
+      showToast((err as Error).message || '获取数据失败');
     })
     .finally(() => {
-      loading.value = false
-    })
+      loading.value = false;
+    });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function onClickLeft(): void {
-  router.back()
+  router.back();
 }
 
 onMounted(() => {
-  fetchRecords()
-})
+  fetchRecords();
+});
 </script>
 
 <style scoped>

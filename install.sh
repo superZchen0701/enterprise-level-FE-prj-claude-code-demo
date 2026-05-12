@@ -1,5 +1,5 @@
 #!/bin/bash
-# install.sh - 团队 Claude 配置一键安装脚本
+# install.sh - 团队 Claude Code 配置一键安装脚本
 # 作者：chaozhi
 # 版本：1.0
 
@@ -40,7 +40,7 @@ log_success() {
 show_banner() {
     echo -e "${BLUE}"
     echo "================================================"
-    echo "  团队 Claude 配置一键安装脚本 v1.0"
+    echo "  团队 Claude Code 配置一键安装脚本 v1.0"
     echo "  作者：chaozhi"
     echo "================================================"
     echo -e "${NC}"

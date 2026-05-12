@@ -66,12 +66,27 @@ for project in "${CHANGED_PROJECTS[@]}"; do
 
   cd "$PROJECT_DIR"
 
+  # 收集需要检查的文件：优先使用暂存区文件，否则收集所有源码文件
+  PROJECT_STAGED=$(git diff --cached --name-only --diff-filter=ACMR --relative 2>/dev/null)
+  if [ -n "$PROJECT_STAGED" ]; then
+    CHECK_FILES=$(echo "$PROJECT_STAGED" | grep -E '\.(vue|js|ts)$' || true)
+  else
+    CHECK_FILES=$(find . -type f \( -name "*.vue" -o -name "*.js" -o -name "*.ts" \) -not -path "./node_modules/*" -not -path "./dist/*" 2>/dev/null || true)
+  fi
+
   # 执行 lint 修复
   echo "运行 ESLint 自动修复..."
   if [ "$PKG_MGR" = "pnpm" ]; then
     pnpm run lint 2>&1 || true
   else
     npm run lint -- --fix 2>&1 || true
+  fi
+
+  # ESLint 修复的是工作目录文件，需要将其加入暂存区
+  if [ -n "$CHECK_FILES" ]; then
+    while IFS= read -r f; do
+      [ -n "$f" ] && [ -f "$f" ] && git add "$f" 2>/dev/null || true
+    done < <(echo "$CHECK_FILES")
   fi
 
   # 修复后再次检查
