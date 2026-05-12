@@ -1,0 +1,52 @@
+fe-vue2-demo/src/mock/exchangeData.js
+  c238146c427578d6 11-12,22,30,38,46,54-56,65-67,74-75,84-85
+fe-vue3-demo/src/mock/index.ts
+  c238146c427578d6 10-11,17-18
+fe-vue3-demo/vite.config.ts
+  c238146c427578d6 1-3,10-11,15,18-20
+fe-vue3-demo/src/router/index.ts
+  c238146c427578d6 1-2,4,10,14-16,20-21,23
+fe-vue3-demo/package.json
+  c238146c427578d6 54-56
+fe-vue2-demo/src/App.vue
+  c238146c427578d6 9-10
+fe-vue2-demo/src/views/ExchangeRecord.vue
+  c238146c427578d6 33,40-41,44,49,52,55,58-59,64,66,68-70
+fe-vue3-demo/src/main.ts
+  c238146c427578d6 1-5,7,9-12,14,16
+fe-vue3-demo/src/api/exchange.ts
+  c238146c427578d6 1-3,6,13,16,24,27
+fe-vue3-demo/src/mock/exchangeData.ts
+  c238146c427578d6 37-38,48,56,64,72,80-82,88-90,97-98,105-106
+fe-vue3-demo/src/utils/request.ts
+  c238146c427578d6 17,24,27,34,36,41-42,46,48-49,53,59,61,63,67,69,72,74,76-77,82,85
+.claude/hooks/pre-commit.sh
+  c238146c427578d6 69-76,85-89
+fe-vue3-demo/src/views/ExchangeRecord.vue
+  c238146c427578d6 33-36,38-40,43,46,49,52-53,58,62-63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "308f40546b8c1cdfc3c2271be9c2008b65c1f532",
+  "prompts": {
+    "c238146c427578d6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "47e0da7f-59e4-4f1f-941f-95ad5a1bff45",
+        "model": "qwen3.6-plus"
+      },
+      "human_author": "zhizhichen",
+      "messages": [],
+      "total_additions": 147,
+      "total_deletions": 130,
+      "accepted_lines": 398,
+      "overriden_lines": 0,
+      "messages_url": "http://10.9.63.227:8000/cas/44ac7278ea98a20b3a720d3c4ade339672c7668f7b7459880a6e8dcbfdc77ec0",
+      "custom_attributes": {
+        "team": "消金研发中心",
+        "user": "zhizhichen"
+      }
+    }
+  }
+}
