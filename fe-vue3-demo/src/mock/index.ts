@@ -7,12 +7,12 @@ export {
   mockRecords,
   STATUS_ENUM,
   getMockRecordsWithPagination,
-  filterMockRecordsByStatus
-} from './exchangeData.js'
+  filterMockRecordsByStatus,
+} from './exchangeData.js';
 
 export type {
   ExchangeRecord,
   PaginationParams,
   PaginationResult,
-  SubmitResult
-} from './exchangeData.js'
+  SubmitResult,
+} from './exchangeData.js';

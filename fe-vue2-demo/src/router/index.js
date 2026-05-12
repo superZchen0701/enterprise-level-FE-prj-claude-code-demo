@@ -1,24 +1,24 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-const ExchangeRecord = () => import('../views/ExchangeRecord.vue')
+const ExchangeRecord = () => import('../views/ExchangeRecord.vue');
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/exchange-record',
     name: 'ExchangeRecord',
-    component: ExchangeRecord
+    component: ExchangeRecord,
   },
   {
     path: '/',
-    redirect: '/exchange-record'
-  }
-]
+    redirect: '/exchange-record',
+  },
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

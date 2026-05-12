@@ -30,44 +30,44 @@
 </template>
 
 <script>
-import { getExchangeRecords } from '@/api/exchange.js'
+import { getExchangeRecords } from '@/api/exchange.js';
 
 export default {
   name: 'ExchangeRecord',
   data() {
     return {
       records: [],
-      loading: false
-    }
+      loading: false,
+    };
   },
   created() {
-    this.fetchRecords()
+    this.fetchRecords();
   },
   methods: {
     // 获取兑换记录列表
     fetchRecords() {
-      this.loading = true
+      this.loading = true;
       getExchangeRecords()
         .then(data => {
-          this.records = data
+          this.records = data;
         })
         .catch(err => {
-          this.$toast(err.message || '获取数据失败')
+          this.$toast(err.message || '获取数据失败');
         })
         .finally(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     onClickLeft() {
       // 判断是否有历史记录
       if (window.history.length > 1) {
-        this.$router.back()
+        this.$router.back();
       } else {
-        this.$toast('当前页面无法返回上一页')
+        this.$toast('当前页面无法返回上一页');
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

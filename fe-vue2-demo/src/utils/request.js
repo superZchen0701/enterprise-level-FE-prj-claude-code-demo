@@ -4,7 +4,7 @@
  */
 
 // 获取基础 URL（从环境变量读取）
-const BASE_URL = process.env.VUE_APP_API_BASE_URL || ''
+const BASE_URL = process.env.VUE_APP_API_BASE_URL || '';
 
 /**
  * 发起 HTTP 请求
@@ -16,63 +16,63 @@ const BASE_URL = process.env.VUE_APP_API_BASE_URL || ''
  * @returns {Promise} 返回响应数据
  */
 export function request(url, options = {}) {
-  const { method = 'GET', data, params, timeout = 15000 } = options
+  const { method = 'GET', data, params, timeout = 15000 } = options;
 
   // 拼接完整 URL
-  let fullUrl = BASE_URL + url
+  let fullUrl = BASE_URL + url;
 
   // 处理 GET 请求的查询参数
   if (params && method === 'GET' && Object.keys(params).length > 0) {
     const queryString = Object.keys(params)
       .filter(key => params[key] !== undefined && params[key] !== null)
       .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-      .join('&')
+      .join('&');
     if (queryString) {
-      fullUrl += (fullUrl.includes('?') ? '&' : '?') + queryString
+      fullUrl += (fullUrl.includes('?') ? '&' : '?') + queryString;
     }
   }
 
   // 构建请求配置，包含超时控制
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), timeout)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
   const config = {
     method,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    signal: controller.signal
-  }
+    signal: controller.signal,
+  };
 
   // POST/PUT 请求添加请求体
   if (data && (method === 'POST' || method === 'PUT')) {
-    config.body = JSON.stringify(data)
+    config.body = JSON.stringify(data);
   }
 
   // 发起请求
   return fetch(fullUrl, config)
     .then(response => {
-      clearTimeout(timeoutId)
+      clearTimeout(timeoutId);
       if (!response.ok) {
-        throw new Error(`请求失败: ${response.status} ${response.statusText}`)
+        throw new Error(`请求失败: ${response.status} ${response.statusText}`);
       }
-      return response.json()
+      return response.json();
     })
     .then(res => {
       // 后端返回格式为 { code: 0, data: {}, message: '' }
       if (res.code !== 0 && res.code !== 200) {
-        throw new Error(res.message || '请求失败')
+        throw new Error(res.message || '请求失败');
       }
-      return res.data
+      return res.data;
     })
     .catch(err => {
-      clearTimeout(timeoutId)
+      clearTimeout(timeoutId);
       if (err.name === 'AbortError') {
-        err.message = '请求超时，请重试'
+        err.message = '请求超时，请重试';
       }
-      return Promise.reject(err)
-    })
+      return Promise.reject(err);
+    });
 }
 
 // 导出便捷方法
-export const get = (url, params) => request(url, { method: 'GET', params })
-export const post = (url, data) => request(url, { method: 'POST', data })
+export const get = (url, params) => request(url, { method: 'GET', params });
+export const post = (url, data) => request(url, { method: 'POST', data });
