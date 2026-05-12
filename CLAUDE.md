@@ -177,8 +177,28 @@ bash .claude/hooks/install-git-hooks.sh
 - 理解某个模块的职责
 - 确定文件应该放在哪个目录
 
+### 6. `/opsx:*` - OpenSpec 规范管理技能
+
+**描述**：OpenSpec 规范管理（explore/new/propose/apply/verify/archive 等）
+
+**适用场景**：
+- 需求探索
+- 变更管理
+- 代码生成
+- 验证实现
+- 归档变更
+
 ---
 
 ## 项目可用命令列表
 
-暂无自定义命令
+### 1. `/opsx:*`
+
+**描述**：OpenSpec 规范管理（explore/new/propose/apply/verify/archive 等）
+
+**适用场景**：
+- 需求探索
+- 变更管理
+- 代码生成
+- 验证实现
+- 归档变更

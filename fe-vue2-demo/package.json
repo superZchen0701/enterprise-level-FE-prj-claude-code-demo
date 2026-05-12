@@ -41,7 +41,9 @@
       "no-debugger": "error",                                                                        
       "no-unused-vars": "warn",                                                                      
       "vue/require-prop-types": "error",                                                             
-      "vue/require-default-prop": "error" 
+      "vue/require-default-prop": "error",
+      "semi": ["error", "always"],
+      "comma-dangle": ["error", "always-multiline"]
     }
   },
   "browserslist": [

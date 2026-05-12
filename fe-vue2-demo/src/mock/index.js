@@ -7,5 +7,5 @@ export {
   mockRecords,
   STATUS_ENUM,
   getMockRecordsWithPagination,
-  filterMockRecordsByStatus
-} from './exchangeData.js'
+  filterMockRecordsByStatus,
+} from './exchangeData.js';
