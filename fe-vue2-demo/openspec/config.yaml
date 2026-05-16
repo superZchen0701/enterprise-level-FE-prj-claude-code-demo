@@ -17,28 +17,43 @@ context: |
 
   ## 项目结构
   ```
-  src/
-  ├── api/                    # API 接口封装
-  │   └── exchange.js         # 兑换模块接口（查询、提交兑换记录）
-  │
-  ├── assets/                 # 静态资源
-  │   └── logo.png            # 项目 Logo
-  │
-  ├── mock/                   # Mock 数据
-  │   ├── exchangeData.js     # 兑换记录 mock 数据、状态枚举、分页/筛选工具
-  │   └── index.js            # mock 模块统一导出
-  │
-  ├── router/                 # 路由配置
-  │   └── index.js            # 路由定义（当前：/exchange-record）
-  │
-  ├── utils/                  # 工具函数
-  │   └── request.js          # HTTP 请求封装（fetch + 超时控制 + 统一错误处理）
-  │
-  ├── views/                  # 页面视图组件
-  │   └── ExchangeRecord.vue  # 兑换记录列表页面
-  │
-  ├── App.vue                 # 根组件
-  └── main.js                 # 入口文件（引入 Vant 组件、挂载 Vue）
+  fe-vue2-demo/
+  ├── public/                      # 静态资源（直接复制到输出目录）
+  │   ├── favicon.ico             # 网站图标
+  │   └── index.html             # HTML 入口
+  ├── src/                         # 源代码目录
+  │   ├── main.js                 # 入口文件（引入 Vant 组件、挂载 Vue）
+  │   ├── App.vue                 # 根组件
+  │   ├── router/                 # 路由配置
+  │   │   └── index.js            # 路由定义（当前：/exchange-record）
+  │   ├── views/                  # 页面视图组件
+  │   │   └── ExchangeRecord.vue  # 兑换记录列表页面
+  │   ├── components/            # 公共组件（当前暂无）
+  │   ├── api/                   # API 接口封装
+  │   │   └── exchange.js        # 兑换模块接口（查询、提交兑换记录）
+  │   ├── utils/                 # 工具函数
+  │   │   └── request.js         # HTTP 请求封装（fetch + 超时控制 + 统一错误处理）
+  │   ├── mock/                  # Mock 数据
+  │   │   ├── exchangeData.js    # 兑换记录 mock 数据、状态枚举、分页/筛选工具
+  │   │   └── index.js           # mock 模块统一导出
+  │   └── assets/                # 静态资源
+  │       └── logo.png           # 项目 Logo
+  ├── docs/                       # 项目文档
+  │   └── ai-context/             # AI 上下文文档
+  ├── openspec/                   # OpenSpec 需求管理目录
+  │   ├── changes/                # 变更目录
+  │   │   └── archive/            # 已归档变更
+  │   ├── specs/                  # 主规范库
+  │   ├── config.yaml             # OpenSpec 配置
+  │   └── README.md               # OpenSpec 使用指南
+  ├── .env.development            # 开发环境变量
+  ├── .env.production             # 生产环境变量
+  ├── .env.example                # 环境变量模板
+  ├── package.json                # 项目依赖配置
+  ├── vue.config.js               # Vue CLI 构建配置
+  ├── babel.config.js             # Babel 转码配置
+  ├── jsconfig.json               # JavaScript 项目配置（@/ 别名）
+  └── CLAUDE.md                   # Claude Code AI 行为规范
   ```
 
   ### 目录职责详解

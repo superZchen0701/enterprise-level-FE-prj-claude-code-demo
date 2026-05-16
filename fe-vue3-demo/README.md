@@ -67,14 +67,18 @@ fe-vue3-demo/
 ├── public/                      # 静态资源（直接复制到输出目录）
 │   └── favicon.ico              # 网站图标
 ├── src/                         # 源代码目录
-│   ├── main.js                  # 应用入口，全局注册组件
+│   ├── main.ts                  # 应用入口，全局注册组件
 │   ├── App.vue                  # 根组件
-│   ├── router/index.js          # 路由配置
+│   ├── router/index.ts          # 路由配置
 │   ├── views/                   # 页面级组件（业务逻辑）
 │   ├── components/              # 公共组件（可复用 UI）
 │   ├── api/                     # API 接口封装
+│   │   └── exchange.ts         # 兑换模块接口
 │   ├── utils/                   # 工具函数
+│   │   └── request.ts          # HTTP 请求封装
 │   ├── mock/                    # Mock 数据（开发环境模拟）
+│   │   ├── exchangeData.ts     # 兑换记录 mock 数据
+│   │   └── index.ts            # mock 模块导出
 │   └── assets/                  # 静态资源
 ├── openspec/                    # OpenSpec 需求管理目录
 │   ├── changes/                 # 变更目录
@@ -88,8 +92,8 @@ fe-vue3-demo/
 ├── .env.development             # 开发环境变量
 ├── .env.production              # 生产环境变量
 ├── package.json                 # 项目依赖配置
-├── vite.config.js               # Vite 构建配置
-├── jsconfig.json                # JavaScript 项目配置（@/ 别名）
+├── vite.config.ts               # Vite 构建配置
+├── tsconfig.json                # TypeScript 配置
 └── CLAUDE.md                    # Claude Code AI 行为规范
 ```
 
