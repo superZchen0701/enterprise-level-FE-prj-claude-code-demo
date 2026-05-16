@@ -53,7 +53,7 @@ jobs:
         run: bash .claude/hooks/pre-commit.sh
 
   # ===========================================
-  # 2. PR 代码审查（仅在 PR 时触发）
+  # 2. PR 代码审查（仅在 PR 时触发。TODO 设置密钥后再放开注释部分）
   # ===========================================
   code-review-pr:
     name: PR 代码审查
@@ -71,8 +71,8 @@ jobs:
 
       - name: 运行 Claude Code 代码审查
         run: |
-          npm install -g @anthropic-ai/claude-code
-          claude -p --dangerously-skip-permissions --max-turns 30 --verbose "请阅读当前目录下的 .claude/skills/pr-code-review/skill.md 文件，严格按照其中的步骤执行 PR 代码审查，完成后输出完整的审查报告"
+          # npm install -g @anthropic-ai/claude-code
+          # claude -p --dangerously-skip-permissions --max-turns 30 --verbose "请阅读当前目录下的 .claude/skills/pr-code-review/skill.md 文件，严格按照其中的步骤执行 PR 代码审查，完成后输出完整的审查报告"
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
