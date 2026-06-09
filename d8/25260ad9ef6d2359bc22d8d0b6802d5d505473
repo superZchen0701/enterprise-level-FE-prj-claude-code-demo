@@ -1,0 +1,36 @@
+.mcp.json
+  4d7e6301a7f0f58a 1-12
+.claude/agents/mobile-ui-reviewer.md
+  4d7e6301a7f0f58a 1-53
+.claude/hooks/protect-files.sh
+  4d7e6301a7f0f58a 1-20,22-24,26-29
+.claude/settings.json
+  4d7e6301a7f0f58a 59-80
+.claude/hooks/post-edit-lint.sh
+  4d7e6301a7f0f58a 1-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "d825260ad9ef6d2359bc22d8d0b6802d5d505473",
+  "prompts": {
+    "4d7e6301a7f0f58a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "25f4bd15-ddc6-4561-b06e-1e37a7b2c93c",
+        "model": "qwen3.7-max"
+      },
+      "human_author": "zhizhichen",
+      "messages": [],
+      "total_additions": 165,
+      "total_deletions": 24,
+      "accepted_lines": 450,
+      "overriden_lines": 3,
+      "messages_url": "http://10.9.63.227:8000/cas/089cca19abe48a5509f6e4dd4dd86490f08c914c24ceaa309d7d08095b1bd7a7",
+      "custom_attributes": {
+        "team": "消金研发中心",
+        "user": "zhizhichen"
+      }
+    }
+  }
+}
