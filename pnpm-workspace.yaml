@@ -1,3 +1,7 @@
 packages:
   - 'fe-vue2-demo'
   - 'fe-vue3-demo'
+allowBuilds:
+  core-js: false
+  esbuild: false
+  yorkie: false
