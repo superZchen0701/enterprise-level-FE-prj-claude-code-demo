@@ -32,3 +32,4 @@ pnpm-lock.yaml
 # .gitignore 中要忽略这些
 .claude/settings.local.json
 .claude/*.local.*
+.playwright-mcp/
